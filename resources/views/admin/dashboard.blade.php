@@ -39,7 +39,7 @@
                 <p style="font-size: 1.5em; font-weight: bold;">₱{{ number_format($totalRevenue, 2) }}</p>
             </div>
             <div class="card" style="flex: 1; background-color: #024CAA; color: white; padding: 20px; border-radius: 10px; box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1); text-align: center;">
-                <h2>Base Total Prices (₱)</h2>
+                <h2>Shipping Profits (₱)</h2>
                 <p style="font-size: 1.5em; font-weight: bold;">₱{{ number_format($totalBaseRevenue, 2) }}</p>
             </div>
         </div>
@@ -47,12 +47,21 @@
 
         <!-- Date Range Filter Form -->
         <!-- Improved Date Range Filter Form -->
-        <form id="date-filter-form" method="GET" action="{{ route('admin.dashboard') }}" style="margin-top: 40px; display: flex; gap: 10px; justify-content: flex-end;">
+        <form id="filter-form" method="GET" action="{{ route('admin.dashboard') }}" style="margin-top: 40px; display: flex; gap: 10px; justify-content: flex-end; align-items: center;">
             <label for="date_ordered_from" style="align-self: center;">Date From:</label>
             <input type="date" name="date_ordered_from" id="date_ordered_from" value="{{ request('date_ordered_from') ?? $dateFrom }}" style="padding: 5px;">
 
             <label for="date_ordered_to" style="align-self: center;">Date To:</label>
             <input type="date" name="date_ordered_to" id="date_ordered_to" value="{{ request('date_ordered_to') ?? $dateTo }}" style="padding: 5px;">
+
+            <label for="status" style="align-self: center;">Status:</label>
+            <select name="status" id="status" style="padding: 5px;">
+                <option value="">All</option>
+                <option value="pending" {{ request('status') == 'pending' ? 'selected' : '' }}>Pending</option>
+                <option value="ready_for_shipping" {{ request('status') == 'ready_for_shipping' ? 'selected' : '' }}>Ready for Shipping</option>
+                <option value="delivered" {{ request('status') == 'delivered' ? 'selected' : '' }}>Delivered</option>
+                <option value="cancelled" {{ request('status') == 'cancelled' ? 'selected' : '' }}>Cancelled</option>
+            </select>
 
             <button type="submit" style="padding: 5px 15px; background-color: #024CAA; color: white; border: none; border-radius: 5px;">
                 Apply Filter
@@ -62,21 +71,33 @@
 
 
 
+
         <div class="charts-section" style="margin-top: 40px;">
             <h2 style="font-size: 1.8em; color: #091057; border-bottom: 2px solid #091057; padding-bottom: 10px;">
                 Analytics
             </h2>
             <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px;">
+                <!-- Orders Chart -->
                 <div>
+                    <h3 style="text-align: center; color: #091057;">Orders Over Time</h3>
                     <canvas id="ordersChart" style="width: 100%; height: 300px;"></canvas>
                 </div>
+                
+                <!-- Revenue Chart -->
                 <div>
+                    <h3 style="text-align: center; color: #091057;">Parcel Price Over Time (₱)</h3>
                     <canvas id="revenueChart" style="width: 100%; height: 300px;"></canvas>
                 </div>
+                
+                <!-- Base Revenue Chart -->
                 <div>
+                    <h3 style="text-align: center; color: #091057;">Shipping Profit Over Time (₱)</h3>
                     <canvas id="baseRevenueChart" style="width: 100%; height: 300px;"></canvas>
                 </div>
+                
+                <!-- Customers Chart -->
                 <div>
+                    <h3 style="text-align: center; color: #091057;">Customer Count Over Time</h3>
                     <canvas id="customersChart" style="width: 100%; height: 300px;"></canvas>
                 </div>
             </div>
