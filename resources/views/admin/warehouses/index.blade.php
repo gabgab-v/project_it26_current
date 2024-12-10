@@ -2,6 +2,7 @@
 
 @section('content')
     <h1>Warehouses</h1>
+    <a href="{{ route('admin.orders.index') }}" class="search-btn">Go Back</a>
 
     <a href="{{ route('admin.warehouses.create') }}" class="btn btn-primary">Add Warehouse</a>
 

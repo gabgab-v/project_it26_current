@@ -3,6 +3,7 @@
 
 @section('content')
     <h1>Create New Order</h1>
+    <a href="{{ route('admin.orders.index') }}" class="search-btn">Go Back</a>
 
     <div class="create-order-form" style="background-color: #ffffff; padding: 20px; border-radius: 10px; box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2); max-width: 500px; margin: 20px auto;">
         <form action="{{ route('admin.orders.store') }}" method="POST">

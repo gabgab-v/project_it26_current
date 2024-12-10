@@ -3,6 +3,7 @@
 @section('content')
     <h1>Location Fees</h1>
     <a href="{{ route('admin.location-fees.create') }}" class="btn btn-primary">Add New Location Fee</a>
+    <a href="{{ route('admin.orders.index') }}" class="search-btn">Go Back</a>
     <table class="table">
         <thead>
             <tr>

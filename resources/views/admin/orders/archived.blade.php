@@ -2,6 +2,7 @@
 
 @section('content')
 <h1>Archived Orders</h1>
+<a href="{{ route('admin.orders.index') }}" class="search-btn">Go Back</a>
 
 <table class="order-table">
     <thead>

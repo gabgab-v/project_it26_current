@@ -17,10 +17,8 @@
             <a href="{{ route('admin.orders.archived') }}" class="search-btn">Archived Orders</a>
             <a href="{{ route('admin.warehouses.index') }}" class="search-btn">Warehouse</a>
             <a href="{{ route('admin.orders.delivered') }}" class="search-btn">Delivered</a>
-            <a href="{{ route('admin.location-fees.index') }}" class="btn btn-primary">Manage Location Fees</a>
+            <a href="{{ route('admin.location-fees.index') }}" class="search-btn">Manage Location Fees</a>
             <a href="{{ route('admin.drivers.pending') }}">Pending Drivers</a>
-
-
         </nav>
     </header>
 
@@ -32,6 +30,7 @@
                 {{ __('Log Out') }}
             </button>
         </form>
+        <a href="{{ route('admin.dashboard') }}" class="search-btn">Dashboard</a>
 
         <form method="GET" action="{{ route('admin.orders.index') }}">
             <label for="date_ordered_from">Date From:</label>

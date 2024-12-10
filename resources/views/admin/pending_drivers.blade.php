@@ -2,6 +2,7 @@
 
 @section('content')
     <h1>Pending Driver Registrations</h1>
+    <a href="{{ route('admin.orders.index') }}" class="search-btn">Go Back</a>
 
     <table>
         <thead>
