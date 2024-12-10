@@ -12,13 +12,11 @@
             </div>
         </div>
         <nav>
-            <a href="#">About Us</a>
-            <a href="#">Services</a>
             <a href="{{ route('admin.orders.archived') }}" class="search-btn">Archived Orders</a>
             <a href="{{ route('admin.warehouses.index') }}" class="search-btn">Warehouse</a>
             <a href="{{ route('admin.orders.delivered') }}" class="search-btn">Delivered</a>
             <a href="{{ route('admin.location-fees.index') }}" class="search-btn">Manage Location Fees</a>
-            <a href="{{ route('admin.drivers.pending') }}">Pending Drivers</a>
+            <a href="{{ route('admin.drivers.pending') }}" class="search-btn">Pending Drivers</a>
         </nav>
     </header>
 
@@ -147,6 +145,7 @@
                     </td>
 
                     <!-- Modal for Cancel Order -->
+                    <div id="modalOverlay"></div>
                     <div id="cancelModal" style="display: none;">
                         <h2>Cancel Order</h2>
                         <form id="cancelForm" method="POST">
@@ -276,6 +275,33 @@
             background-color: #EC8305;
             color: #ffffff;
         }
+            /* Dark overlay */
+        #modalOverlay {
+            display: none; /* Initially hidden */
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent black */
+            z-index: 999; /* Ensure it covers the screen */
+        }
+
+        /* Modal styling */
+        #cancelModal {
+            display: none; /* Initially hidden */
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 400px; /* Adjust width as needed */
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            z-index: 1000; /* Above the overlay */
+        }
+
     </style>
     <!-- JavaScript for Assign Driver AJAX call -->
     <script>
@@ -355,13 +381,12 @@
         const form = document.getElementById('cancelForm');
         form.action = `/admin/orders/${orderId}/cancel`; // Set the dynamic action
         document.getElementById('cancelModal').style.display = 'block'; // Show the modal
-        document.getElementById('modalOverlay').style.display = 'block'; // Show overlay for better UX
+        document.getElementById('modalOverlay').style.display = 'block'; // Show the overlay
     }
 
-    // Hide modal and reset input fields
     function closeModal() {
         document.getElementById('cancelModal').style.display = 'none'; // Hide the modal
-        document.getElementById('modalOverlay').style.display = 'none'; // Hide overlay
+        document.getElementById('modalOverlay').style.display = 'none'; // Hide the overlay
         document.querySelectorAll('input[name="reason_option"]').forEach((radio) => (radio.checked = false)); // Reset radios
         document.getElementById('otherReasonInput').value = ''; // Clear the "Other" input
         document.getElementById('finalCancelReason').value = ''; // Reset the final reason
