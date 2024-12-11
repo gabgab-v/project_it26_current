@@ -68,6 +68,7 @@
                     <th>Customer</th>
                     <th>Base Total Price</th>
                     <th>Total Price (Including Fees)</th>
+                    <th>Weight</th>
                     <th>Status</th>
                     <th>Duration</th>
                     <th>Warehouse</th>
@@ -85,6 +86,7 @@
                     <td>{{ optional($order->user)->name ?? 'Anonymous' }}</td>
                     <td>₱{{ number_format($order->base_total_price, 2) }}</td>
                     <td>₱{{ number_format($order->total_price, 2) }}</td>
+                    <td>{{ isset($order->weight) ? number_format($order->weight, 0) . ' kg' : 'N/A' }}</td>
                     <td>{{ ucfirst($order->status) }}</td>
                     <td>{{ $order->duration ?? 'N/A' }}</td>
                     <td>{{ optional($order->warehouse)->name ?? 'No warehouse assigned' }}</td>

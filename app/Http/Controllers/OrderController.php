@@ -76,6 +76,7 @@ class OrderController extends Controller
     }
 
     // Store a newly created order in the database
+// Store a newly created order in the database
     public function store(Request $request)
     {
         $validated = $request->validate([
@@ -84,6 +85,7 @@ class OrderController extends Controller
             'warehouse_id' => 'required|exists:warehouses,id',
             'parcel_location' => 'nullable|string',
             'destination' => 'required|string|exists:location_fees,location_name',
+            'weight' => 'required|numeric|min:0', // Validate weight input
         ]);
 
         // Automatically set the parcel_location based on the selected warehouse
@@ -93,11 +95,14 @@ class OrderController extends Controller
         // Calculate location fees
         $locationFees = $this->calculateLocationFees($validated['parcel_location'], $validated['destination']);
 
+        // Calculate weight-based fee
+        $weightFee = $this->calculateWeightFee($validated['weight']); // Add weight-based calculation here
+
         // Save the base total price separately
         $baseTotalPrice = $validated['total_price'];
 
-        // Add location fees to the total price
-        $validated['total_price'] += $locationFees;
+        // Add location fees and weight-based fees to the total price
+        $validated['total_price'] += $locationFees + $weightFee; // Update total price calculation
 
         // Include the base_total_price in the order data
         $validated['base_total_price'] = $baseTotalPrice;
@@ -105,8 +110,9 @@ class OrderController extends Controller
         // Create the order
         Order::create($validated);
 
-        return redirect()->route('admin.orders.index')->with('success', 'Order created successfully with location fees.');
+        return redirect()->route('admin.orders.index')->with('success', 'Order created successfully with location and weight-based fees.');
     }
+
 
     
     /**
@@ -128,6 +134,26 @@ class OrderController extends Controller
     
         return $originFee + $destinationFee;
     }
+
+    /**
+     * Calculate additional fees based on the weight of the order.
+     *
+     * @param float $weight
+     * @return float
+     */
+    private function calculateWeightFee(float $weight): float
+    {
+        // Define your weight-based pricing rules
+        $baseRate = 5.0; // Base rate per kilogram
+        $minFee = 10.0; // Minimum fee for weight
+
+        // Calculate the fee
+        $fee = $weight * $baseRate;
+
+        // Ensure the minimum fee is applied
+        return max($fee, $minFee);
+    }
+
     
 
     // Display the specified order

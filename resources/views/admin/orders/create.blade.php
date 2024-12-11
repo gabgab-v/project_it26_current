@@ -48,6 +48,10 @@
                 </select>
             </div>
 
+            <div style="margin-bottom: 15px;">
+                <label for="weight" style="display: block; font-size: 1.1em; color: #091057;">Weight (kg):</label>
+                <input type="number" name="weight" id="weight" step="0.01" required style="width: 100%; padding: 10px; border: 1px solid #091057; border-radius: 5px;">
+            </div>
 
             <button type="submit" style="background-color: #024CAA; color: white; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer; font-size: 1em; width: 100%; transition: background-color 0.3s ease;">
                 Create Order
