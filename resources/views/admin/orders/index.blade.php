@@ -1,10 +1,10 @@
 @extends('layouts.admin')
 
 @section('content')
-    <header>
+    <header class="flex border border-black bg-blue-900 text-white justify-between items-center p-4 rounded">
         <div class="logo">
             <div class="logo-circle">
-                <img src="{{ asset('images/jgab_logo3.png') }}" alt="JGAB Express Logo">
+                <img src="{{ asset('images/jgab_logo3.png') }}" alt="JGAB Express Logo" class="w-[100px] h-[100px]">
             </div>
             <div class="logo-text">
                 <h1>JGAB Express</h1>
@@ -12,299 +12,184 @@
             </div>
         </div>
         <nav>
-            <a href="{{ route('admin.orders.archived') }}" class="search-btn">Archived Orders</a>
-            <a href="{{ route('admin.warehouses.index') }}" class="search-btn">Warehouse</a>
-            <a href="{{ route('admin.orders.delivered') }}" class="search-btn">Delivered</a>
-            <a href="{{ route('admin.location-fees.index') }}" class="search-btn">Manage Location Fees</a>
-            <a href="{{ route('admin.drivers.pending') }}" class="search-btn">Pending Drivers</a>
+            <a href="{{ route('admin.orders.archived') }}" class="px-3 py-2 bg-blue-500 text-white rounded hover:bg-orange-600">Archived Orders</a>
+            <a href="{{ route('admin.warehouses.index') }}" class="px-3 py-2 bg-blue-500 text-white rounded hover:bg-orange-600">Warehouse</a>
+            <a href="{{ route('admin.orders.delivered') }}" class="px-3 py-2 bg-blue-500 text-white rounded hover:bg-orange-600">Delivered</a>
+            <a href="{{ route('admin.location-fees.index') }}" class="px-3 py-2 bg-blue-500 text-white rounded hover:bg-orange-600">Manage Location Fees</a>
+            <a href="{{ route('admin.drivers.pending') }}" class="px-3 py-2 bg-blue-500 text-white rounded hover:bg-orange-600">Pending Drivers</a>
         </nav>
     </header>
 
     <section class="content">
         <h1>Orders List</h1>
-        <form method="POST" action="{{ route('admin.logout') }}">
-            @csrf
-            <button type="submit" class="search-btn">
-                {{ __('Log Out') }}
-            </button>
-        </form>
-        <a href="{{ route('admin.dashboard') }}" class="search-btn">Dashboard</a>
+        <div class="flex gap-2 mb-3">
+            <form method="POST" action="{{ route('admin.logout') }}">
+                @csrf
+                <button type="submit" class="px-3 py-2 bg-blue-500 text-white rounded hover:bg-orange-600">
+                    {{ __('Log Out') }}
+                </button>
+            </form>
+            <a href="{{ route('admin.dashboard') }}" class="px-3 py-2 bg-blue-500 text-white rounded hover:bg-orange-600">Dashboard</a>
+        </div>
 
-        <form method="GET" action="{{ route('admin.orders.index') }}">
-            <label for="date_ordered_from">Date From:</label>
-            <input type="date" name="date_ordered_from" id="date_ordered_from" value="{{ request('date_ordered_from') }}">
+        <div class="flex flex-col gap-4 mb-3">
+            <form method="GET" action="{{ route('admin.orders.index') }}">
+                <label for="date_ordered_from">Date From:</label>
+                <input type="date" name="date_ordered_from" id="date_ordered_from" value="{{ request('date_ordered_from') }}">
 
-            <label for="date_ordered_to">Date To:</label>
-            <input type="date" name="date_ordered_to" id="date_ordered_to" value="{{ request('date_ordered_to') }}">
+                <label for="date_ordered_to">Date To:</label>
+                <input type="date" name="date_ordered_to" id="date_ordered_to" value="{{ request('date_ordered_to') }}">
 
-            <label for="status">Status:</label>
-            <select name="status" id="status">
-                <option value="">All</option>
-                <option value="pending" {{ request('status') == 'pending' ? 'selected' : '' }}>Pending</option>
-                <option value="ready_for_shipping" {{ request('status') == 'ready_for_shipping' ? 'selected' : '' }}>Ready for Shipping</option>
-                <option value="delivered" {{ request('status') == 'delivered' ? 'selected' : '' }}>Delivered</option>
-                <option value="cancelled" {{ request('status') == 'cancelled' ? 'selected' : '' }}>Cancelled</option>
-            </select>
+                <label for="status">Status:</label>
+                <select name="status" id="status">
+                    <option value="">All</option>
+                    <option value="pending" {{ request('status') == 'pending' ? 'selected' : '' }}>Pending</option>
+                    <option value="ready_for_shipping" {{ request('status') == 'ready_for_shipping' ? 'selected' : '' }}>Ready for Shipping</option>
+                    <option value="delivered" {{ request('status') == 'delivered' ? 'selected' : '' }}>Delivered</option>
+                    <option value="cancelled" {{ request('status') == 'cancelled' ? 'selected' : '' }}>Cancelled</option>
+                </select>
 
-            <label for="driver_id">Driver:</label>
-            <select name="driver_id" id="driver_id">
-                <option value="">All</option>
-                @foreach ($drivers as $driver)
-                    <option value="{{ $driver->id }}" {{ request('driver_id') == $driver->id ? 'selected' : '' }}>{{ $driver->name }}</option>
-                @endforeach
-            </select>
-
-
-            <button type="submit" class="search-btn">Filter</button>
-        </form>
+                <label for="driver_id">Driver:</label>
+                <select name="driver_id" id="driver_id">
+                    <option value="">All</option>
+                    @foreach ($drivers as $driver)
+                        <option value="{{ $driver->id }}" {{ request('driver_id') == $driver->id ? 'selected' : '' }}>{{ $driver->name }}</option>
+                    @endforeach
+                </select>
 
 
-        <a href="{{ route('admin.orders.create') }}" class="search-btn">Create New Order</a>
+                <button type="submit" class="px-3 py-2 bg-blue-500 text-white rounded hover:bg-orange-600">Filter</button>
+            </form>
+            <a href="{{ route('admin.orders.create') }}" class="px-3 py-2 bg-blue-500 text-white rounded hover:bg-orange-600 w-fit">Create New Order</a>
+        </div>
 
-        <table class="order-table">
-            <thead>
-                <tr>
-                    <th>Order Number</th>
-                    <th>Customer</th>
-                    <th>Base Total Price</th>
-                    <th>Total Price (Including Fees)</th>
-                    <th>Weight</th>
-                    <th>Status</th>
-                    <th>Duration</th>
-                    <th>Warehouse</th>
-                    <th>Parcel Location (Origin)</th>
-                    <th>Destination</th>
-                    <th>Fully Delivered</th>
-                    <th>Driver</th>
-                    <th>Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach ($orders as $order)
-                <tr>
-                    <td>{{ $order->order_number }}</td>
-                    <td>{{ optional($order->user)->name ?? 'Anonymous' }}</td>
-                    <td>₱{{ number_format($order->base_total_price, 2) }}</td>
-                    <td>₱{{ number_format($order->total_price, 2) }}</td>
-                    <td>{{ isset($order->weight) ? number_format($order->weight, 0) . ' kg' : 'N/A' }}</td>
-                    <td>{{ ucfirst($order->status) }}</td>
-                    <td>{{ $order->duration ?? 'N/A' }}</td>
-                    <td>{{ optional($order->warehouse)->name ?? 'No warehouse assigned' }}</td>
-                    <td>{{ $order->parcel_location ?? 'No parcel location' }}</td>
-                    <td>{{ $order->destination ?? 'No destination' }}</td>
-                    <td>
-                        {{ $order->is_fully_delivered ? 'Yes' : 'Pending Confirmation' }}
-                    </td>
-                    <td>
-                        @if ($order->driver)
-                            {{ $order->driver->name }}
-                        @else
-                            Not Assigned
-                        @endif
-                    </td>
-                    <td>
-                        <a href="{{ route('admin.orders.show', $order->id) }}" class="search-btn">View</a>
-
-                        @if ($order->status !== 'delivered')
-                            <a href="{{ route('admin.orders.edit', $order->id) }}" class="search-btn">Edit</a>
-                            @if ($order->status !== 'cancelled')
-                                <!-- Cancel Order Button -->
-                                <button class="btn btn-danger" onclick="showCancelModal({{ $order->id }})">Cancel Order</button>
+        <div class="overflow-x-auto relative w-full max-w-full">
+            <table class="table-auto border border-gray-300 min-w-full text-left text-sm">
+                <thead class="bg-blue-900 text-white">
+                    <tr>
+                        <th class="px-4 py-2 border border-gray-300">Order Number</th>
+                        <th class="px-4 py-2 border border-gray-300">Customer</th>
+                        <th class="px-4 py-2 border border-gray-300">Base Total Price</th>
+                        <th class="px-4 py-2 border border-gray-300">Total Price (Including Fees)</th>
+                        <th class="px-4 py-2 border border-gray-300">Weight</th>
+                        <th class="px-4 py-2 border border-gray-300">Status</th>
+                        <th class="px-4 py-2 border border-gray-300">Duration</th>
+                        <th class="px-4 py-2 border border-gray-300">Warehouse</th>
+                        <th class="px-4 py-2 border border-gray-300">Parcel Location (Origin)</th>
+                        <th class="px-4 py-2 border border-gray-300">Destination</th>
+                        <th class="px-4 py-2 border border-gray-300">Fully Delivered</th>
+                        <th class="px-4 py-2 border border-gray-300">Driver</th>
+                        <th class="px-4 py-2 border border-gray-300">Actions</th>
+                    </tr>
+                </thead>
+                <tbody class="bg-gray-100">
+                    @foreach ($orders as $order)
+                    <tr class="hover:bg-gray-200">
+                        <td class="px-4 py-2 border border-gray-300">{{ $order->order_number }}</td>
+                        <td class="px-4 py-2 border border-gray-300">{{ optional($order->user)->name ?? 'Anonymous' }}</td>
+                        <td class="px-4 py-2 border border-gray-300">₱{{ number_format($order->base_total_price, 2) }}</td>
+                        <td class="px-4 py-2 border border-gray-300">₱{{ number_format($order->total_price, 2) }}</td>
+                        <td class="px-4 py-2 border border-gray-300">{{ isset($order->weight) ? number_format($order->weight, 0) . ' kg' : 'N/A' }}</td>
+                        <td class="px-4 py-2 border border-gray-300">{{ ucfirst($order->status) }}</td>
+                        <td class="px-4 py-2 border border-gray-300">{{ $order->duration ?? 'N/A' }}</td>
+                        <td class="px-4 py-2 border border-gray-300">{{ optional($order->warehouse)->name ?? 'No warehouse assigned' }}</td>
+                        <td class="px-4 py-2 border border-gray-300">{{ $order->parcel_location ?? 'No parcel location' }}</td>
+                        <td class="px-4 py-2 border border-gray-300">{{ $order->destination ?? 'No destination' }}</td>
+                        <td class="px-4 py-2 border border-gray-300">{{ $order->is_fully_delivered ? 'Yes' : 'Pending Confirmation' }}</td>
+                        <td class="px-4 py-2 border border-gray-300">
+                            @if ($order->driver)
+                                {{ $order->driver->name }}
                             @else
-                                <span>Cancelled</span>
+                                Not Assigned
                             @endif
-                        @endif
+                        </td>
+                        <td class="px-4 py-2 border border-gray-300">
+                        <div class="flex items-center gap-2">
+                            <a href="{{ route('admin.orders.show', $order->id) }}" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">View</a>
 
-                        @if ($order->status === 'Pending')
-                            <form action="{{ route('admin.orders.process', $order->id) }}" method="POST" style="display:inline;">
-                                @csrf
-                                <button type="submit" class="search-btn">Process Order</button>
-                            </form>
-                        @endif
+                            @if ($order->status !== 'delivered')
+                                <a href="{{ route('admin.orders.edit', $order->id) }}" class="bg-yellow-500 text-white px-4 py-2 rounded hover:bg-yellow-600">Edit</a>
+                                @if ($order->status !== 'cancelled')
+                                    <button class="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600" onclick="showCancelModal({{ $order->id }})">Cancel</button>
+                                @else
+                                    <span class="text-gray-500 px-4 py-2">Cancelled</span>
+                                @endif
+                            @endif
 
-                        {{-- Show Assign Driver dropdown only if no driver is assigned --}}
-                        @if ($order->status === 'ready_for_shipping' && !$order->driver)
-                            <form id="assignDriverForm-{{ $order->id }}" action="{{ route('admin.orders.assign_driver', $order->id) }}" method="POST" style="display:inline;">
-                                @csrf
-                                <label for="driver-{{ $order->id }}">Assign Driver:</label>
-                                <select id="driver-{{ $order->id }}" name="driver_id" onchange="document.getElementById('assignDriverForm-{{ $order->id }}').submit();">
-                                    <option value="">Select Driver</option>
-                                    @foreach ($drivers as $driver)
-                                        <option value="{{ $driver->id }}">{{ $driver->name }}</option>
-                                    @endforeach
-                                </select>
-                            </form>
-                        @endif
+                            @if ($order->status === 'Pending')
+                                <form action="{{ route('admin.orders.process', $order->id) }}" method="POST" class="inline">
+                                    @csrf
+                                    <button type="submit" class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600">Process</button>
+                                </form>
+                            @endif
 
-                        {{-- Show Confirm Fully Delivered button for delivered but not fully confirmed orders --}}
-                        @if ($order->status === 'delivered' && !$order->is_fully_delivered)
-                            <form action="{{ route('admin.orders.confirm_delivery', $order->id) }}" method="POST" style="display:inline;">
-                                @csrf
-                                @method('PATCH')
-                                <button type="submit" class="search-btn">Confirm Fully Delivered</button>
-                            </form>
-                        @endif
+                            @if ($order->status === 'ready_for_shipping' && !$order->driver)
+                                <form id="assignDriverForm-{{ $order->id }}" action="{{ route('admin.orders.assign_driver', $order->id) }}" method="POST" class="inline">
+                                    @csrf
+                                    <div class="flex items-center gap-2">
+                                        <label for="driver-{{ $order->id }}" class="text-sm">Assign Driver:</label>
+                                        <select id="driver-{{ $order->id }}" name="driver_id" class="border border-gray-300 rounded px-3 py-2" onchange="document.getElementById('assignDriverForm-{{ $order->id }}').submit();">
+                                            <option value="">Select Driver</option>
+                                            @foreach ($drivers as $driver)
+                                                <option value="{{ $driver->id }}">{{ $driver->name }}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                </form>
+                            @endif
+
+                            @if ($order->status === 'delivered' && !$order->is_fully_delivered)
+                                <form action="{{ route('admin.orders.confirm_delivery', $order->id) }}" method="POST" class="inline">
+                                    @csrf
+                                    @method('PATCH')
+                                    <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Confirm Fully Delivered</button>
+                                </form>
+                            @endif
+                        </div>
                     </td>
 
-                    <!-- Modal for Cancel Order -->
-                    <div id="modalOverlay"></div>
-                    <div id="cancelModal" style="display: none;">
-                        <h2>Cancel Order</h2>
-                        <form id="cancelForm" method="POST">
-                            @csrf
-                            @method('PATCH')
+                    </tr>
+                    @endforeach
+                </tbody>
+            </table>
+        </div>
 
-                            <input type="hidden" name="cancel_reason" id="finalCancelReason"> <!-- For resolved reason -->
-                            <input type="hidden" name="other_reason" id="otherReasonInputHidden"> <!-- To store the 'Other' reason -->
+        <!-- Modal for Cancel Order -->
+<div id="modalOverlay" class="fixed inset-0 bg-black bg-opacity-50 hidden"></div>
+<div id="cancelModal" class="fixed inset-0 flex items-center justify-center hidden">
+    <div class="bg-white rounded-lg shadow-lg p-6 w-1/3">
+        <h2 class="text-lg font-bold mb-4">Cancel Order</h2>
+        <form id="cancelForm" method="POST">
+            @csrf
+            @method('PATCH')
 
-                            <!-- Radio Buttons -->
-                            <label for="cancel_reason">Reason for Cancellation:</label>
-                            <div>
-                                <input type="radio" name="reason_option" value="Out of Stock" id="reason_out_of_stock"> Out of Stock<br>
-                                <input type="radio" name="reason_option" value="Customer Request" id="reason_customer_request"> Customer Request<br>
-                                <input type="radio" name="reason_option" value="Other" id="reason_other"> Other<br>
-                            </div>
+            <input type="hidden" name="cancel_reason" id="finalCancelReason"> <!-- For resolved reason -->
+            <input type="hidden" name="other_reason" id="otherReasonInputHidden"> <!-- To store the 'Other' reason -->
 
-                            <!-- 'Other' Input -->
-                            <div id="otherReasonContainer" style="display: none;">
-                                <label for="other_reason">Specify Reason:</label>
-                                <input type="text" id="otherReasonInput" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 5px;">
-                            </div>
+            <!-- Radio Buttons -->
+            <label for="cancel_reason" class="block font-medium">Reason for Cancellation:</label>
+            <div class="mt-2">
+                <input type="radio" name="reason_option" value="Out of Stock" id="reason_out_of_stock" class="mr-2"> Out of Stock<br>
+                <input type="radio" name="reason_option" value="Customer Request" id="reason_customer_request" class="mr-2"> Customer Request<br>
+                <input type="radio" name="reason_option" value="Other" id="reason_other" class="mr-2"> Other<br>
+            </div>
 
-                            <button type="submit" class="btn btn-danger">Submit</button>
-                            <button type="button" onclick="closeModal()" class="btn btn-secondary">Close</button>
-                        </form>
+            <!-- 'Other' Input -->
+            <div id="otherReasonContainer" class="mt-4 hidden">
+                <label for="other_reason" class="block font-medium">Specify Reason:</label>
+                <input type="text" id="otherReasonInput" class="w-full px-3 py-2 border rounded mt-2" placeholder="Enter reason here">
+            </div>
 
-                    </div>
-                    
+            <div class="flex items-center justify-end mt-6">
+                <button type="submit" class="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600 mr-2">Submit</button>
+                <button type="button" onclick="closeModal()" class="bg-gray-300 text-gray-700 px-4 py-2 rounded hover:bg-gray-400">Close</button>
+            </div>
+        </form>
+    </div>
+</div>
 
-
-
-
-                </tr>
-                @endforeach
-            </tbody>
-        </table>
     </section>
 
-
-
-    <style>
-        /* Add consistent styling from the main page */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-        body {
-            background-color: #DBD3D3;
-            color: #091057;
-        }
-        header {
-            background-color: #091057;
-            display: flex;
-            justify-content: space-between;
-            padding: 20px;
-            align-items: center;
-            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
-        }
-        .logo {
-            display: flex;
-            align-items: center;
-        }
-        .logo-circle {
-            width: 60px;
-            height: 60px;
-            background-color: #024CAA;
-            border-radius: 50%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            margin-right: 15px;
-            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
-        }
-        .logo-circle img {
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-        }
-        .logo-text h1 {
-            font-size: 1.8em;
-            margin-bottom: 5px;
-            color: #ffffff;
-        }
-        .logo-text p {
-            font-size: 0.9em;
-            color: #ffffff;
-            margin-top: -5px;
-        }
-        .content h1 {
-            margin-top: 30px;
-            color: #091057;
-        }
-        .order-table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 20px;
-            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
-        }
-        .order-table th, .order-table td {
-            padding: 12px;
-            text-align: left;
-            border-bottom: 1px solid #ddd;
-        }
-        .order-table th {
-            background-color: #024CAA;
-            color: #ffffff;
-        }
-        .order-table tr:hover {
-            background-color: #f1f1f1;
-        }
-        .search-btn {
-            background-color: #024CAA;
-            border: none;
-            padding: 10px;
-            color: white;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 1em;
-            transition: background-color 0.3s ease, color 0.3s ease;
-            margin-top: 10px;
-            text-decoration: none;
-        }
-        .search-btn:hover {
-            background-color: #EC8305;
-            color: #ffffff;
-        }
-            /* Dark overlay */
-        #modalOverlay {
-            display: none; /* Initially hidden */
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent black */
-            z-index: 999; /* Ensure it covers the screen */
-        }
-
-        /* Modal styling */
-        #cancelModal {
-            display: none; /* Initially hidden */
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 400px; /* Adjust width as needed */
-            background-color: #fff;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-            z-index: 1000; /* Above the overlay */
-        }
-
-    </style>
     <!-- JavaScript for Assign Driver AJAX call -->
     <script>
         function assignDriver(orderId) {

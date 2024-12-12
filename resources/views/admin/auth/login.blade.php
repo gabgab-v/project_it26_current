@@ -9,64 +9,97 @@
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.bunny.net">
-    <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
+    <link href="https://fonts.bunny.net/css?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet" />
 
     <!-- Scripts -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 
     <style>
-        .content {
-            max-width: 400px;
-            margin: auto;
-            padding: 2rem;
-            background-color: #f9f9f9;
-            border-radius: 8px;
-            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Roboto', sans-serif;
         }
-        
-        .login-title {
-            font-size: 1.5rem;
-            text-align: center;
-            margin-bottom: 1.5rem;
+
+        body {
+            background-image: url('{{ asset('images/BG.jpg') }}');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
             color: #333;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .content {
+            width: 500px;
+            padding: 2rem;
+            background-color: rgba(255, 255, 255, 0.85);
+            border-radius: 12px;
+            box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.2);
+            text-align: center;
+        }
+
+        .logo img {
+            width: 120px;
+            height: auto;
+            margin-bottom: 1rem;
+            margin-left: 160px;
+            margin-right: 50px;
+        }
+
+        .login-title {
+            font-size: 1.8rem;
+            color: #091057;
+            margin-bottom: 1.5rem;
+            font-weight: bold;
         }
 
         .input-group {
-            margin-bottom: 1rem;
+            margin-bottom: 1.5rem;
         }
 
         .input-label {
             font-size: 0.9rem;
-            color: #666;
+            color: #555;
             margin-bottom: 0.5rem;
+            display: block;
         }
 
         .input-field {
             width: 100%;
             padding: 0.75rem;
             border: 1px solid #ddd;
-            border-radius: 4px;
+            border-radius: 8px;
             font-size: 1rem;
             background-color: #fff;
+            transition: border-color 0.3s, box-shadow 0.3s;
         }
 
         .input-field:focus {
             outline: none;
-            border-color: #4f46e5;
-            box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.2);
+            border-color: #024CAA;
+            box-shadow: 0 0 6px rgba(2, 76, 170, 0.3);
         }
 
         .login-button {
             background-color: #024CAA;
-            padding: 0.75rem 1.5rem;
+            padding: 0.8rem 1.5rem;
             font-size: 1rem;
             color: #fff;
-            border-radius: 4px;
-            transition: background-color 0.3s;
+            border-radius: 50px;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.2s;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
         }
 
         .login-button:hover {
             background-color: #3730a3;
+            transform: translateY(-3px);
         }
 
         .error-text {
@@ -77,13 +110,20 @@
 </head>
 <body>
     <section class="content login-content">
+        <!-- Logo -->
+        <div class="logo">
+            <img src="{{ asset('images/jgab_logo3.png') }}" alt="JGAB Logo">
+        </div>
+
+        <!-- Title -->
         <h1 class="login-title">Admin Login</h1>
 
         <!-- Session Status -->
         @if (session('status'))
-            <div class="mb-4">{{ session('status') }}</div>
+            <div class="mb-4 text-green-600">{{ session('status') }}</div>
         @endif
 
+        <!-- Login Form -->
         <form method="POST" action="{{ route('admin.login') }}" class="login-form">
             @csrf
 
@@ -97,7 +137,7 @@
             </div>
 
             <!-- Password -->
-            <div class="input-group mt-4">
+            <div class="input-group">
                 <label for="password" class="input-label">Password</label>
                 <input id="password" type="password" name="password" required autocomplete="current-password" class="input-field">
                 @error('password')
@@ -105,10 +145,8 @@
                 @enderror
             </div>
 
-            <!-- Login Actions -->
-            <div class="flex items-center justify-between mt-4">
-                <button type="submit" class="login-button">Log in</button>
-            </div>
+            <!-- Login Button -->
+            <button type="submit" class="login-button">Log in</button>
         </form>
     </section>
 </body>

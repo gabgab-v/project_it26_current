@@ -9,73 +9,138 @@
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.bunny.net">
-    <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
+    <link href="https://fonts.bunny.net/css?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet" />
 
     <!-- Scripts -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 
     <style>
         body {
-            background-color: #DBD3D3;
+            margin: 0;
+            padding: 0;
+            font-family: 'Roboto', sans-serif;
+            background-image: url('{{ asset('images/BG.jpg') }}');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
             color: #091057;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
         }
-        .content {
-            margin: auto;
-            max-width: 500px;
-            padding: 20px;
-            background: white;
-            border-radius: 10px;
-            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+
+        .login-container {
+            background: rgba(255, 255, 255, 0.9); /* White with slight opacity */
+            border-radius: 15px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+            padding: 40px;
+            width: 100%;
+            max-width: 400px;
             text-align: center;
+            backdrop-filter: blur(10px);
         }
-        .login-title {
-            font-size: 1.5em;
+
+        .logo-container {
+            display: flex;
+            justify-content: center;
             margin-bottom: 20px;
         }
-        .login-form {
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
+
+        .logo-container img {
+            width: 150px;
+            height: auto;
         }
+
+        .login-title {
+            font-size: 1.8rem;
+            font-weight: bold;
+            margin-bottom: 20px;
+            color: #091057;
+        }
+
         .input-group {
-            display: flex;
-            flex-direction: column;
-            align-items: flex-start;
+            margin-bottom: 20px;
+            text-align: left;
         }
+
         .input-label {
             font-weight: bold;
+            margin-bottom: 5px;
+            display: block;
         }
+
         .input-field {
             width: 100%;
-            padding: 10px;
-            border: 1px solid #091057;
-            border-radius: 5px;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            background-color: #fff;
+            font-size: 1rem;
+            transition: border 0.3s, box-shadow 0.3s;
         }
+
+        .input-field:focus {
+            border: 1px solid #024CAA;
+            box-shadow: 0 0 8px rgba(2, 76, 170, 0.3);
+            outline: none;
+        }
+
         .error-text {
-            color: red;
-            font-size: 0.9em;
+            color: #e74c3c;
+            font-size: 0.85rem;
+            margin-top: 5px;
         }
+
         .forgot-password-link {
+            font-size: 0.9rem;
+            color: #024CAA;
             text-decoration: none;
-            color: #091057;
-            font-size: 0.9em;
+            margin-top: 10px;
+            display: inline-block;
+            transition: color 0.3s;
         }
+
+        .forgot-password-link:hover {
+            color: #005BBB;
+        }
+
         .login-button {
-            background-color: #024CAA;
+            background: linear-gradient(145deg, #024CAA, #005BBB);
             color: white;
-            padding: 10px 15px;
+            font-weight: bold;
+            padding: 12px 20px;
             border: none;
-            border-radius: 5px;
+            border-radius: 50px;
             cursor: pointer;
-            transition: background-color 0.3s;
+            transition: transform 0.2s, background-color 0.3s;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
         }
+
         .login-button:hover {
+            transform: translateY(-3px);
             background-color: #EC8305;
+        }
+
+        .checkbox-label {
+            display: flex;
+            align-items: center;
+            font-size: 0.9rem;
+        }
+
+        .checkbox-input {
+            margin-right: 8px;
         }
     </style>
 </head>
 <body>
-    <section class="content login-content">
+    <div class="login-container">
+        <!-- Logo -->
+        <div class="logo-container">
+            <img src="{{ asset('images/jgab_logo3.png') }}" alt="JGAB Logo">
+        </div>
+
+        <!-- Login Title -->
         <h1 class="login-title">Driver Login</h1>
 
         <!-- Session Status -->
@@ -83,7 +148,8 @@
             <div class="mb-4">{{ session('status') }}</div>
         @endif
 
-        <form method="POST" action="{{ route('driver.login') }}" class="login-form">
+        <!-- Login Form -->
+        <form method="POST" action="{{ route('driver.login') }}">
             @csrf
 
             <!-- Email Address -->
@@ -96,7 +162,7 @@
             </div>
 
             <!-- Password -->
-            <div class="input-group mt-4">
+            <div class="input-group">
                 <label for="password" class="input-label">Password</label>
                 <input id="password" type="password" name="password" required autocomplete="current-password" class="input-field">
                 @error('password')
@@ -105,22 +171,22 @@
             </div>
 
             <!-- Remember Me -->
-            <div class="flex items-center mt-4">
+            <div class="input-group">
                 <label for="remember_me" class="checkbox-label">
-                    <input id="remember_me" type="checkbox" class="checkbox-input" name="remember">
+                    <input id="remember_me" type="checkbox" name="remember" class="checkbox-input">
                     <span>Remember me</span>
                 </label>
             </div>
 
             <!-- Login Actions -->
-            <div class="flex items-center justify-between mt-4">
+            <div class="input-group">
                 @if (Route::has('password.request'))
                     <a href="{{ route('password.request') }}" class="forgot-password-link">Forgot your password?</a>
                 @endif
-
-                <button type="submit" class="login-button">Log in as Driver</button>
             </div>
+
+            <button type="submit" class="login-button">Log in as Driver</button>
         </form>
-    </section>
+    </div>
 </body>
 </html>

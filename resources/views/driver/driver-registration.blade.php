@@ -9,85 +9,131 @@
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.bunny.net">
-    <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
+    <link href="https://fonts.bunny.net/css?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet" />
 
     <!-- Scripts -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 
     <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
         body {
-            background-color: #DBD3D3;
+            font-family: 'Roboto', sans-serif;
+            background-image: url('{{ asset('images/BG.jpg') }}');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
             color: #091057;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
         }
-        .content {
-            margin: auto;
-            max-width: 500px;
-            padding: 20px;
-            background: white;
-            border-radius: 10px;
-            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+
+        .register-container {
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 15px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+            padding: 20px 30px;
+            width: 100%;
+            max-width: 450px;
             text-align: center;
+            backdrop-filter: blur(10px);
         }
+
+        .logo-container img {
+            width: 100px;
+            height: auto;
+            margin: 0 auto 10px;
+        }
+
         .register-title {
-            font-size: 1.5em;
-            margin-bottom: 20px;
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin-bottom: 15px;
+            color: #091057;
         }
-        .register-form {
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-        }
+
         .input-group {
-            display: flex;
-            flex-direction: column;
-            align-items: flex-start;
+            margin-bottom: 10px;
+            text-align: left;
         }
+
         .input-label {
             font-weight: bold;
+            margin-bottom: 3px;
+            font-size: 0.85rem;
         }
+
         .input-field {
             width: 100%;
-            padding: 10px;
-            border: 1px solid #091057;
+            padding: 8px;
+            border: 1px solid #ddd;
             border-radius: 5px;
+            font-size: 0.85rem;
+            transition: border 0.3s, box-shadow 0.3s;
         }
+
+        .input-field:focus {
+            border: 1px solid #024CAA;
+            box-shadow: 0 0 5px rgba(2, 76, 170, 0.3);
+            outline: none;
+        }
+
         .error-text {
-            color: red;
-            font-size: 0.9em;
+            color: #e74c3c;
+            font-size: 0.75rem;
+            margin-top: 3px;
         }
+
         .register-button {
-            background-color: #024CAA;
+            background: linear-gradient(145deg, #024CAA, #005BBB);
             color: white;
+            font-weight: bold;
             padding: 10px 15px;
             border: none;
-            border-radius: 5px;
+            border-radius: 50px;
             cursor: pointer;
-            transition: background-color 0.3s;
+            transition: transform 0.2s, background-color 0.3s;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+            width: 100%;
         }
+
         .register-button:hover {
+            transform: translateY(-2px);
             background-color: #EC8305;
         }
     </style>
 </head>
 <body>
-    <section class="content register-content">
+    <div class="register-container">
+        <!-- Logo -->
+        <div class="logo-container">
+            <img src="{{ asset('images/jgab_logo3.png') }}" alt="JGAB Logo">
+        </div>
+
+        <!-- Register Title -->
         <h1 class="register-title">Driver Registration</h1>
 
-        <form method="POST" action="{{ route('driver.register') }}" class="register-form">
+        <!-- Registration Form -->
+        <form method="POST" action="{{ route('driver.register') }}">
             @csrf
 
             <!-- Name -->
             <div class="input-group">
                 <label for="name" class="input-label">Name</label>
-                <input id="name" type="text" name="name" value="{{ old('name') }}" required autofocus class="input-field">
+                <input id="name" type="text" name="name" value="{{ old('name') }}" required class="input-field">
                 @error('name')
                     <span class="error-text">{{ $message }}</span>
                 @enderror
             </div>
 
-            <!-- Email Address -->
-            <div class="input-group mt-4">
+            <!-- Email -->
+            <div class="input-group">
                 <label for="email" class="input-label">Email</label>
                 <input id="email" type="email" name="email" value="{{ old('email') }}" required class="input-field">
                 @error('email')
@@ -96,7 +142,7 @@
             </div>
 
             <!-- License Number -->
-            <div class="input-group mt-4">
+            <div class="input-group">
                 <label for="license" class="input-label">License Number</label>
                 <input id="license" type="text" name="license" value="{{ old('license') }}" required class="input-field">
                 @error('license')
@@ -105,8 +151,8 @@
             </div>
 
             <!-- Vehicle Information -->
-            <div class="input-group mt-4">
-                <label for="vehicle" class="input-label">Vehicle Information</label>
+            <div class="input-group">
+                <label for="vehicle" class="input-label">Vehicle Info</label>
                 <input id="vehicle" type="text" name="vehicle" value="{{ old('vehicle') }}" required class="input-field">
                 @error('vehicle')
                     <span class="error-text">{{ $message }}</span>
@@ -114,28 +160,26 @@
             </div>
 
             <!-- Password -->
-            <div class="input-group mt-4">
+            <div class="input-group">
                 <label for="password" class="input-label">Password</label>
-                <input id="password" type="password" name="password" required autocomplete="new-password" class="input-field">
+                <input id="password" type="password" name="password" required class="input-field">
                 @error('password')
                     <span class="error-text">{{ $message }}</span>
                 @enderror
             </div>
 
             <!-- Confirm Password -->
-            <div class="input-group mt-4">
+            <div class="input-group">
                 <label for="password_confirmation" class="input-label">Confirm Password</label>
-                <input id="password_confirmation" type="password" name="password_confirmation" required autocomplete="new-password" class="input-field">
+                <input id="password_confirmation" type="password" name="password_confirmation" required class="input-field">
                 @error('password_confirmation')
                     <span class="error-text">{{ $message }}</span>
                 @enderror
             </div>
 
             <!-- Register Button -->
-            <div class="flex items-center justify-between mt-4">
-                <button type="submit" class="register-button">Register as Driver</button>
-            </div>
+            <button type="submit" class="register-button">Register</button>
         </form>
-    </section>
+    </div>
 </body>
 </html>

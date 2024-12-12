@@ -163,16 +163,19 @@ class OrderController extends Controller
         $originFee = LocationFee::where('location_name', $order->parcel_location)->value('fee') ?? 0;
         $destinationFee = LocationFee::where('location_name', $order->destination)->value('fee') ?? 0;
     
-        return view('admin.orders.show', compact('order', 'originFee', 'destinationFee'));
+        // Fetch all users
+        $users = User::all();
+    
+        return view('admin.orders.show', compact('order', 'originFee', 'destinationFee', 'users'));
     }
 
     // Show the form for editing an order
     public function edit($id)
     {
         $order = Order::findOrFail($id);
-        $customers = Customer::all(); // Fetch all customers
+        $users = User::all(); // Fetch all customers
     
-        return view('admin.orders.edit', compact('order', 'customers')); // Updated path
+        return view('admin.orders.edit', compact('order', 'users')); // Updated path
     }
 
     // Update the specified order in the database
@@ -518,6 +521,8 @@ class OrderController extends Controller
 
         return redirect()->route('admin.drivers.pending')->with('message', 'Driver rejected successfully.');
     }
+
+    
 
 
 
