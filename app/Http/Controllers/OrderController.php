@@ -494,7 +494,7 @@ class OrderController extends Controller
         $order->parcel_location = 'At Warehouse'; // Optional location update
         $order->save();
     
-        return redirect()->route('admin.admin.warehouse.orders.list')->with('success', 'Order marked as ready for shipping.');
+        return redirect()->route('admin.warehouse.orders.index')->with('success', 'Order marked as ready for shipping.');
 
     }
     

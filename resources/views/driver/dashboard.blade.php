@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Driver Dashboard</title>
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
     <style>
         * {
             margin: 0;
@@ -200,17 +201,19 @@
                             <td>{{ $order->destination }}</td>
                             <td>{{ ucfirst($order->status) }}</td>
                             <td class="actions">
-                                <form action="{{ route('driver.driver.orders.update_status', $order->id) }}" method="POST">
-                                    @csrf
-                                    @method('PATCH')
-                                    <select name="status" onchange="this.form.submit()">
+                            <form action="{{ route('driver.driver.orders.update_status', $order->id) }}" method="POST">
+                                @csrf
+                                @method('PATCH')
+                                <div class="flex items-center space-x-4">
+                                    <select name="status" class="border border-gray-300 rounded px-3 py-2" required>
                                         <option value="in_transit" {{ $order->status == 'in_transit' ? 'selected' : '' }}>In Transit</option>
                                         <option value="delivered" {{ $order->status == 'delivered' ? 'selected' : '' }}>Delivered</option>
                                     </select>
-                                    <noscript>
-                                        <button type="submit">Update Status</button>
-                                    </noscript>
-                                </form>
+                                    <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition duration-300">
+                                        Update
+                                    </button>
+                                </div>
+                            </form>
                             </td>
                         </tr>
                     @endif

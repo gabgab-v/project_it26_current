@@ -22,7 +22,7 @@ class LoginController extends Controller
     
             // Redirect based on the admin's role
             if ($admin->role === 'warehouse') {
-                return redirect()->route('admin.admin.warehouse.orders.list');
+                return redirect()->route('admin.warehouse.orders.index');
             }
     
             // Default redirection for other roles
