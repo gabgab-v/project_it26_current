@@ -1,67 +1,86 @@
 @extends('layouts.admin')
 
 @section('content')
-    <header class="flex border border-black bg-blue-900 text-white justify-between items-center p-4 rounded">
-        <div class="logo">
-            <div class="logo-circle">
-                <img src="{{ asset('images/jgab_logo3.png') }}" alt="JGAB Express Logo" class="w-[100px] h-[100px]">
+    <header class="flex items-center justify-between p-6 bg-blue-900 text-white rounded-lg shadow-lg">
+        <div class="flex items-center space-x-4">
+            <div class="logo-circle w-16 h-16 bg-blue-500 flex justify-center items-center rounded-full shadow-md">
+                <img src="{{ asset('images/jgab_logo3.png') }}" alt="JGAB Express Logo" class="w-14 h-14 rounded-full">
             </div>
             <div class="logo-text">
-                <h1>JGAB Express</h1>
-                <p>Stay Informed, Stay on Track</p>
+                <h1 class="text-xl font-bold">JGAB Express</h1>
+                <p class="text-sm text-gray-300">Stay Informed, Stay on Track</p>
             </div>
         </div>
-        <nav>
-            <a href="{{ route('admin.orders.archived') }}" class="px-3 py-2 bg-blue-500 text-white rounded hover:bg-orange-600">Archived Orders</a>
-            <a href="{{ route('admin.warehouses.index') }}" class="px-3 py-2 bg-blue-500 text-white rounded hover:bg-orange-600">Warehouse</a>
-            <a href="{{ route('admin.orders.delivered') }}" class="px-3 py-2 bg-blue-500 text-white rounded hover:bg-orange-600">Delivered</a>
-            <a href="{{ route('admin.location-fees.index') }}" class="px-3 py-2 bg-blue-500 text-white rounded hover:bg-orange-600">Manage Location Fees</a>
-            <a href="{{ route('admin.drivers.pending') }}" class="px-3 py-2 bg-blue-500 text-white rounded hover:bg-orange-600">Pending Drivers</a>
+        <nav class="flex space-x-4">
+            <a href="{{ route('admin.orders.archived') }}" class="px-4 py-2 bg-blue-600 rounded-lg text-sm font-medium hover:bg-orange-500 transition duration-300">Archived Orders</a>
+            <a href="{{ route('admin.warehouses.index') }}" class="px-4 py-2 bg-blue-600 rounded-lg text-sm font-medium hover:bg-orange-500 transition duration-300">Warehouse</a>
+            <a href="{{ route('admin.orders.delivered') }}" class="px-4 py-2 bg-blue-600 rounded-lg text-sm font-medium hover:bg-orange-500 transition duration-300">Delivered</a>
+            <a href="{{ route('admin.location-fees.index') }}" class="px-4 py-2 bg-blue-600 rounded-lg text-sm font-medium hover:bg-orange-500 transition duration-300">Manage Location Fees</a>
+            <a href="{{ route('admin.drivers.pending') }}" class="px-4 py-2 bg-blue-600 rounded-lg text-sm font-medium hover:bg-orange-500 transition duration-300">Pending Drivers</a>
         </nav>
     </header>
 
     <section class="content">
-        <h1>Orders List</h1>
-        <div class="flex gap-2 mb-3">
-            <form method="POST" action="{{ route('admin.logout') }}">
-                @csrf
-                <button type="submit" class="px-3 py-2 bg-blue-500 text-white rounded hover:bg-orange-600">
-                    {{ __('Log Out') }}
-                </button>
-            </form>
-            <a href="{{ route('admin.dashboard') }}" class="px-3 py-2 bg-blue-500 text-white rounded hover:bg-orange-600">Dashboard</a>
-        </div>
+    <h1 class="text-3xl font-bold mb-4">Orders List</h1>
 
-        <div class="flex flex-col gap-4 mb-3">
-            <form method="GET" action="{{ route('admin.orders.index') }}">
-                <label for="date_ordered_from">Date From:</label>
-                <input type="date" name="date_ordered_from" id="date_ordered_from" value="{{ request('date_ordered_from') }}">
+    <div class="flex gap-2 mb-4">
+        <form method="POST" action="{{ route('admin.logout') }}">
+            @csrf
+            <button type="submit" class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-orange-600">
+                {{ __('Log Out') }}
+            </button>
+        </form>
+        <a href="{{ route('admin.dashboard') }}" class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-orange-600">Dashboard</a>
+    </div>
 
-                <label for="date_ordered_to">Date To:</label>
-                <input type="date" name="date_ordered_to" id="date_ordered_to" value="{{ request('date_ordered_to') }}">
+    <div class="flex flex-col gap-4 mb-4">
+        <form method="GET" action="{{ route('admin.orders.index') }}" class="flex flex-wrap gap-4 items-end">
+            <div class="flex flex-col">
+                <label for="date_ordered_from" class="mb-1 text-sm font-medium">Date From:</label>
+                <input type="date" name="date_ordered_from" id="date_ordered_from" value="{{ request('date_ordered_from') }}" class="px-3 py-2 border border-gray-300 rounded">
+            </div>
 
-                <label for="status">Status:</label>
-                <select name="status" id="status">
+            <div class="flex flex-col">
+                <label for="date_ordered_to" class="mb-1 text-sm font-medium">Date To:</label>
+                <input type="date" name="date_ordered_to" id="date_ordered_to" value="{{ request('date_ordered_to') }}" class="px-3 py-2 border border-gray-300 rounded">
+            </div>
+
+            <div class="flex flex-col">
+                <label for="status" class="mb-1 text-sm font-medium">Status:</label>
+                <select name="status" id="status" class="px-3 py-2 border border-gray-300 rounded">
                     <option value="">All</option>
                     <option value="pending" {{ request('status') == 'pending' ? 'selected' : '' }}>Pending</option>
                     <option value="ready_for_shipping" {{ request('status') == 'ready_for_shipping' ? 'selected' : '' }}>Ready for Shipping</option>
                     <option value="delivered" {{ request('status') == 'delivered' ? 'selected' : '' }}>Delivered</option>
                     <option value="cancelled" {{ request('status') == 'cancelled' ? 'selected' : '' }}>Cancelled</option>
                 </select>
+            </div>
 
-                <label for="driver_id">Driver:</label>
-                <select name="driver_id" id="driver_id">
+            <div class="flex flex-col">
+                <label for="driver_id" class="mb-1 text-sm font-medium">Driver:</label>
+                <select name="driver_id" id="driver_id" class="px-3 py-2 border border-gray-300 rounded">
                     <option value="">All</option>
                     @foreach ($drivers as $driver)
-                        <option value="{{ $driver->id }}" {{ request('driver_id') == $driver->id ? 'selected' : '' }}>{{ $driver->name }}</option>
+                        <option value="{{ $driver->id }}" {{ request('driver_id') == $driver->id ? 'selected' : '' }}>
+                            {{ $driver->name }}
+                        </option>
                     @endforeach
                 </select>
+            </div>
 
+            <div class="flex">
+                <button type="submit" class="px-3 py-2 bg-blue-500 text-white rounded hover:bg-orange-600">
+                    Filter
+                </button>
+            </div>
 
-                <button type="submit" class="px-3 py-2 bg-blue-500 text-white rounded hover:bg-orange-600">Filter</button>
-            </form>
-            <a href="{{ route('admin.orders.create') }}" class="px-3 py-2 bg-blue-500 text-white rounded hover:bg-orange-600 w-fit">Create New Order</a>
-        </div>
+        </form>
+
+        <a href="{{ route('admin.orders.create') }}" class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-orange-600 w-fit">
+            Create New Order
+        </a>
+    </div>
+
 
         <div class="overflow-x-auto relative w-full max-w-full">
             <table class="table-auto border border-gray-300 min-w-full text-left text-sm">
