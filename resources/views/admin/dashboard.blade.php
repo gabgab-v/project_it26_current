@@ -71,24 +71,40 @@
 
         <!-- Analytics Section -->
         <div class="charts-section" style="margin-top: 40px;">
-            <h2 style="font-size: 1.8em; color: #091057; border-bottom: 2px solid #091057; padding-bottom: 10px;">Analytics</h2>
+            <h2 class="text-white text-xl border-b-2 border-[#091057] pb-2">Analytics</h2>
+
             <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px;">
                 <!-- Chart Containers -->
+                <!-- Orders Chart -->
                 <div>
-                    <h3 style="text-align: center; color: #091057;">Orders Over Time</h3>
+                    <h3 class="text-center text-white font-bold">Orders Over Time</h3>
                     <canvas id="ordersChart" style="width: 100%; height: 300px;"></canvas>
                 </div>
+                
+                <!-- Revenue Chart -->
                 <div>
-                    <h3 style="text-align: center; color: #091057;">Parcel Price Over Time (₱)</h3>
+                    <h3 class="text-center text-white font-bold">Shipping Profit Over Time (₱)</h3>
                     <canvas id="revenueChart" style="width: 100%; height: 300px;"></canvas>
+                </div>
+                
+                <!-- Base Revenue Chart -->
+                <div>
+                    <h3 class="text-center text-white font-bold">Parcel Price Over Time (₱)</h3>
+                    <canvas id="baseRevenueChart" style="width: 100%; height: 300px;"></canvas>
+                </div>
+                
+                <!-- Customers Chart -->
+                <div>
+                    <h3 class="text-center text-white font-bold">Customer Count Over Time</h3>
+                    <canvas id="customersChart" style="width: 100%; height: 300px;"></canvas>
                 </div>
             </div>
         </div>
 
         <!-- Recent Orders Table -->
         <div class="recent-orders" style="margin-top: 40px; background-color: rgba(255, 255, 255, 0.95); padding: 20px; border-radius: 12px; box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.15);">
-    <h2 style="font-size: 1.8em; color: #091057; border-bottom: 2px solid #091057; padding-bottom: 10px; text-align: center;">Recent Orders</h2>
-    <table style="width: 100%; border-collapse: collapse; margin-top: 20px; font-family: 'Roboto', sans-serif;">
+        <h2 style="font-size: 1.8em; color: #091057; border-bottom: 2px solid #091057; padding-bottom: 10px; text-align: center;">Recent Orders</h2>
+        <table style="width: 100%; border-collapse: collapse; margin-top: 20px; font-family: 'Roboto', sans-serif;">
         <thead>
             <tr style="background: linear-gradient(145deg, #024CAA, #0458E2); color: #ffffff; text-align: left;">
                 <th style="padding: 12px; text-transform: uppercase; font-weight: bold; font-size: 0.9em;">Order Number</th>
@@ -117,18 +133,18 @@
 </div>
 
      <!-- Chart.js Script -->
-     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
         // Orders Chart
         const ordersCtx = document.getElementById('ordersChart').getContext('2d');
         const ordersChart = new Chart(ordersCtx, {
             type: 'line',
             data: {
-                labels: {!! json_encode($chartData['dates']) !!},
+                labels: {!! json_encode($chartData['dates']) !!}, // X-axis labels
                 datasets: [{
-                    label: 'Orders',
-                    data: {!! json_encode($chartData['orders']) !!},
-                    borderColor: '#024CAA',
+                    label: 'Orders', // Dataset label
+                    data: {!! json_encode($chartData['orders']) !!}, // Y-axis data
+                    borderColor: '#00008B',
                     backgroundColor: 'rgba(2, 76, 170, 0.1)',
                     fill: true,
                 }],
@@ -139,11 +155,20 @@
                     legend: { display: false },
                 },
                 scales: {
-                    x: { display: true },
-                    y: { display: true },
+                    x: {
+                        ticks: {
+                            color: '#ffffff', // Change tick label color for X-axis
+                        },
+                    },
+                    y: {
+                        ticks: {
+                            color: '#ffffff', // Change tick label color for Y-axis
+                        },
+                    },
                 },
             },
         });
+
 
         // Revenue Chart (Total Price)
         const revenueCtx = document.getElementById('revenueChart').getContext('2d');
@@ -154,7 +179,7 @@
                 datasets: [{
                     label: 'Total Price',
                     data: {!! json_encode($chartData['total_price']) !!},
-                    backgroundColor: '#024CAA',
+                    backgroundColor: '#00008B',
                 }],
             },
             options: {
@@ -163,8 +188,16 @@
                     legend: { display: false },
                 },
                 scales: {
-                    x: { display: true },
-                    y: { display: true },
+                    x: {
+                        ticks: {
+                            color: '#ffffff', // Change tick label color for X-axis
+                        },
+                    },
+                    y: {
+                        ticks: {
+                            color: '#ffffff', // Change tick label color for Y-axis
+                        },
+                    },
                 },
             },
         });
@@ -178,7 +211,7 @@
                 datasets: [{
                     label: 'Base Total Price',
                     data: {!! json_encode($chartData['base_total_price']) !!},
-                    backgroundColor: '#FFA500',
+                    backgroundColor: '#00008B',
                 }],
             },
             options: {
@@ -187,8 +220,16 @@
                     legend: { display: false },
                 },
                 scales: {
-                    x: { display: true },
-                    y: { display: true },
+                    x: {
+                        ticks: {
+                            color: '#ffffff', // Change tick label color for X-axis
+                        },
+                    },
+                    y: {
+                        ticks: {
+                            color: '#ffffff', // Change tick label color for Y-axis
+                        },
+                    },
                 },
             },
         });
@@ -202,7 +243,7 @@
                 datasets: [{
                     label: 'Customers',
                     data: {!! json_encode($chartData['customers']) !!},
-                    borderColor: '#FFA500',
+                    borderColor: '#00008B',
                     backgroundColor: 'rgba(255, 165, 0, 0.1)',
                     fill: true,
                 }],
@@ -213,15 +254,18 @@
                     legend: { display: false },
                 },
                 scales: {
-                    x: { display: true },
-                    y: { display: true },
+                    x: {
+                        ticks: {
+                            color: '#ffffff', // Change tick label color for X-axis
+                        },
+                    },
+                    y: {
+                        ticks: {
+                            color: '#ffffff', // Change tick label color for Y-axis
+                        },
+                    },
                 },
             },
         });
     </script>
-
-
-
-
-
 @endsection
