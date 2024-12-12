@@ -99,10 +99,10 @@
         <!-- Order Info -->
         <div class="order-info">
             <p><strong>Order Number:</strong> {{ $order->order_number }}</p>
-            <p><strong>Status:</strong> {{ ucfirst($order->status) }}</p>
-            <p><strong>Warehouse:</strong> {{ optional($order->warehouse)->name ?? 'Not assigned' }}</p>
+            <td class="px-4 py-2 border border-gray-300">{{ str_replace('_', ' ', ucfirst($order->status)) }}</td>
+            <!-- <p><strong>Warehouse:</strong> {{ optional($order->warehouse)->name ?? 'Not assigned' }}</p> -->
             <p><strong>Driver:</strong> {{ optional($order->driver)->name ?? 'Not assigned' }}</p>
-            <p><strong>Order Date:</strong> {{ $order->created_at->format('F d, Y') }}</p>
+            <p><strong>Order Date:</strong> {{ $order->delivered_at->format('F d, Y') }}</p>
         </div>
 
         <!-- Track Another Order Button -->

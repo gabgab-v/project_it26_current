@@ -16,22 +16,28 @@ class LoginController extends Controller
     public function login(Request $request)
     {
         $credentials = $request->only('email', 'password');
-    
+
         if (Auth::guard('admin')->attempt($credentials)) {
-            $admin = Auth::guard('admin')->user(); // Get the authenticated admin
-    
+            $admin = Auth::guard('admin')->user();
+
+            \Log::info('Authenticated Admin:', ['email' => $admin->email, 'role' => $admin->role]);
+
             // Redirect based on the admin's role
             if ($admin->role === 'warehouse') {
-                return redirect()->route('admin.warehouse.orders.index');
+                $route = route('admin.warehouse.orders.index');
+                \Log::info('Redirecting to:', ['route' => $route]);
+                return redirect($route);
             }
-    
-            // Default redirection for other roles
-            return redirect()->route('admin.dashboard');
+
+            $route = route('admin.dashboard');
+            \Log::info('Redirecting to:', ['route' => $route]);
+            return redirect($route);
         }
-    
+
+        \Log::error('Invalid login attempt:', ['email' => $request->email]);
         return redirect()->back()->withErrors(['email' => 'Invalid credentials']);
     }
-    
+
     
     
 

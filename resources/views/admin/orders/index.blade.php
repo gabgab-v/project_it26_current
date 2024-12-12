@@ -90,7 +90,7 @@
                         <td class="px-4 py-2 border border-gray-300">₱{{ number_format($order->base_total_price, 2) }}</td>
                         <td class="px-4 py-2 border border-gray-300">₱{{ number_format($order->total_price, 2) }}</td>
                         <td class="px-4 py-2 border border-gray-300">{{ isset($order->weight) ? number_format($order->weight, 0) . ' kg' : 'N/A' }}</td>
-                        <td class="px-4 py-2 border border-gray-300">{{ ucfirst($order->status) }}</td>
+                        <td class="px-4 py-2 border border-gray-300">{{ str_replace('_', ' ', ucfirst($order->status)) }}</td>
                         <td class="px-4 py-2 border border-gray-300">{{ $order->duration ?? 'N/A' }}</td>
                         <td class="px-4 py-2 border border-gray-300">{{ optional($order->warehouse)->name ?? 'No warehouse assigned' }}</td>
                         <td class="px-4 py-2 border border-gray-300">{{ $order->parcel_location ?? 'No parcel location' }}</td>

@@ -71,34 +71,42 @@
 
         <!-- Analytics Section -->
         <div class="charts-section" style="margin-top: 40px;">
-            <h2 class="text-white text-xl border-b-2 border-[#091057] pb-2">Analytics</h2>
+            <h2 class="text-white text-xl border-b-2 border-[#091057] pb-2 text-center font-bold">Analytics</h2>
 
-            <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px;">
-                <!-- Chart Containers -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 p-4">
                 <!-- Orders Chart -->
-                <div>
-                    <h3 class="text-center text-white font-bold">Orders Over Time</h3>
-                    <canvas id="ordersChart" style="width: 100%; height: 300px;"></canvas>
+                <div class="shadow-lg rounded-lg p-4">
+                    <h3 class="text-center text-white font-bold bg-blue-700 py-2 px-4 rounded-md inline-block">
+                        Orders Over Time
+                    </h3>
+                    <canvas id="ordersChart" class="w-full h-60"></canvas>
                 </div>
-                
+
                 <!-- Revenue Chart -->
-                <div>
-                    <h3 class="text-center text-white font-bold">Shipping Profit Over Time (₱)</h3>
-                    <canvas id="revenueChart" style="width: 100%; height: 300px;"></canvas>
+                <div class="shadow-lg rounded-lg p-4">
+                    <h3 class="text-center text-white font-bold bg-green-700 py-2 px-4 rounded-md inline-block">
+                        Shipping Profit Over Time (₱)
+                    </h3>
+                    <canvas id="revenueChart" class="w-full h-60"></canvas>
                 </div>
-                
+
                 <!-- Base Revenue Chart -->
-                <div>
-                    <h3 class="text-center text-white font-bold">Parcel Price Over Time (₱)</h3>
-                    <canvas id="baseRevenueChart" style="width: 100%; height: 300px;"></canvas>
+                <div class="shadow-lg rounded-lg p-4">
+                    <h3 class="text-center text-white font-bold bg-orange-700 py-2 px-4 rounded-md inline-block">
+                        Parcel Price Over Time (₱)
+                    </h3>
+                    <canvas id="baseRevenueChart" class="w-full h-60"></canvas>
                 </div>
-                
+
                 <!-- Customers Chart -->
-                <div>
-                    <h3 class="text-center text-white font-bold">Customer Count Over Time</h3>
-                    <canvas id="customersChart" style="width: 100%; height: 300px;"></canvas>
+                <div class="shadow-lg rounded-lg p-4">
+                    <h3 class="text-center text-white font-bold bg-purple-700 py-2 px-4 rounded-md inline-block">
+                        Customer Count Over Time
+                    </h3>
+                    <canvas id="customersChart" class="w-full h-60"></canvas>
                 </div>
             </div>
+
         </div>
 
         <!-- Recent Orders Table -->
@@ -158,11 +166,17 @@
                     x: {
                         ticks: {
                             color: '#ffffff', // Change tick label color for X-axis
+                            font: {
+                            size: 13, // Set font size for Y-axis ticks
+                        },
                         },
                     },
                     y: {
                         ticks: {
                             color: '#ffffff', // Change tick label color for Y-axis
+                            font: {
+                            size: 13, // Set font size for Y-axis ticks
+                        },
                         },
                     },
                 },
@@ -191,11 +205,17 @@
                     x: {
                         ticks: {
                             color: '#ffffff', // Change tick label color for X-axis
+                            font: {
+                            size: 13, // Set font size for Y-axis ticks
+                        },
                         },
                     },
                     y: {
                         ticks: {
                             color: '#ffffff', // Change tick label color for Y-axis
+                            font: {
+                            size: 13, // Set font size for Y-axis ticks
+                        },
                         },
                     },
                 },
@@ -223,11 +243,17 @@
                     x: {
                         ticks: {
                             color: '#ffffff', // Change tick label color for X-axis
+                            font: {
+                            size: 13, // Set font size for Y-axis ticks
+                        },
                         },
                     },
                     y: {
                         ticks: {
                             color: '#ffffff', // Change tick label color for Y-axis
+                            font: {
+                            size: 13, // Set font size for Y-axis ticks
+                        },
                         },
                     },
                 },
@@ -257,11 +283,17 @@
                     x: {
                         ticks: {
                             color: '#ffffff', // Change tick label color for X-axis
+                            font: {
+                            size: 13, // Set font size for Y-axis ticks
+                        },
                         },
                     },
                     y: {
                         ticks: {
                             color: '#ffffff', // Change tick label color for Y-axis
+                            font: {
+                            size: 13, // Set font size for Y-axis ticks
+                        },
                         },
                     },
                 },

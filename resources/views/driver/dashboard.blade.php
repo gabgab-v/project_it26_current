@@ -199,7 +199,7 @@
                             <td>{{ optional($order->user)->name ?? 'No user assigned' }}</td>
                             <td>{{ optional($order->warehouse)->name ?? 'No warehouse assigned' }}</td>
                             <td>{{ $order->destination }}</td>
-                            <td>{{ ucfirst($order->status) }}</td>
+                            <td class="px-4 py-2 border border-gray-300">{{ str_replace('_', ' ', ucfirst($order->status)) }}</td>
                             <td class="actions">
                             <form action="{{ route('driver.driver.orders.update_status', $order->id) }}" method="POST">
                                 @csrf
