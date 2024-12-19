@@ -25,45 +25,63 @@ class OrderController extends Controller
         $request->validate([
             'date_ordered_from' => 'nullable|date|before_or_equal:date_ordered_to',
             'date_ordered_to' => 'nullable|date|after_or_equal:date_ordered_from',
-            'status' => 'nullable|string|in:pending,ready_for_shipping,delivered,cancelled', // Add status validation
+            'status' => 'nullable|string|in:pending,ready_for_shipping,delivered,cancelled',
+            'sort_by' => 'nullable|string|in:created_at_asc,created_at_desc,updated_at_asc,updated_at_desc',
         ]);
-    
+
         $query = Order::with(['customer', 'warehouse', 'driver'])
-                      ->where('is_archived', false);
-    
+                    ->where('is_archived', false);
+
         // Filter by delivery status
         if ($request->has('is_delivered') && $request->is_delivered !== '') {
             $query->where('is_delivered', $request->is_delivered);
         }
-    
+
         // Filter by status
         if ($request->filled('status')) {
             $query->where('status', $request->status);
         }
 
+        // Filter by driver
         if ($request->filled('driver_id')) {
             $query->where('driver_id', $request->driver_id);
         }
-        
-    
+
         // Filter by date range
         if ($request->filled('date_ordered_from') && $request->filled('date_ordered_to')) {
             $dateOrderedFrom = Carbon::parse($request->input('date_ordered_from'))->startOfDay();
             $dateOrderedTo = Carbon::parse($request->input('date_ordered_to'))->endOfDay();
-    
+
             $query->where(function ($q) use ($dateOrderedFrom, $dateOrderedTo) {
                 $q->whereBetween('date_ordered', [$dateOrderedFrom, $dateOrderedTo])
-                  ->orWhereBetween('delivered_at', [$dateOrderedFrom, $dateOrderedTo]);
+                ->orWhereBetween('delivered_at', [$dateOrderedFrom, $dateOrderedTo]);
             });
         }
-    
-        // Additional filters can be added here
-    
+
+        // Apply sorting
+        if ($request->filled('sort_by')) {
+            switch ($request->sort_by) {
+                case 'created_at_asc':
+                    $query->orderBy('created_at', 'asc');
+                    break;
+                case 'created_at_desc':
+                    $query->orderBy('created_at', 'desc');
+                    break;
+                case 'updated_at_asc':
+                    $query->orderBy('updated_at', 'asc');
+                    break;
+                case 'updated_at_desc':
+                    $query->orderBy('updated_at', 'desc');
+                    break;
+            }
+        }
+
         $orders = $query->get();
         $drivers = Driver::all();
-    
+
         return view('admin.orders.index', compact('orders', 'drivers'));
     }
+
     
 
     // Show the form for creating a new order

@@ -75,39 +75,39 @@
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6 p-4">
                 <!-- Orders Chart -->
-                <div class="shadow-lg rounded-lg p-4">
-                    <h3 class="text-center text-white font-bold bg-blue-700 py-2 px-4 rounded-md inline-block">
+                <div class="shadow-lg rounded-lg p-4 bg-white">
+                    <h3 class="text-center text-blue-700 font-bold py-2 px-4 rounded-md inline-block">
                         Orders Over Time
                     </h3>
                     <canvas id="ordersChart" class="w-full h-60"></canvas>
                 </div>
 
                 <!-- Revenue Chart -->
-                <div class="shadow-lg rounded-lg p-4">
-                    <h3 class="text-center text-white font-bold bg-green-700 py-2 px-4 rounded-md inline-block">
+                <div class="shadow-lg rounded-lg p-4 bg-white">
+                    <h3 class="text-center text-blue-700 font-bold py-2 px-4 rounded-md inline-block">
                         Shipping Profit Over Time (₱)
                     </h3>
                     <canvas id="revenueChart" class="w-full h-60"></canvas>
                 </div>
 
                 <!-- Base Revenue Chart -->
-                <div class="shadow-lg rounded-lg p-4">
-                    <h3 class="text-center text-white font-bold bg-orange-700 py-2 px-4 rounded-md inline-block">
+                <div class="shadow-lg rounded-lg p-4 bg-white">
+                    <h3 class="text-center text-blue-700 font-bold py-2 px-4 rounded-md inline-block">
                         Parcel Price Over Time (₱)
                     </h3>
                     <canvas id="baseRevenueChart" class="w-full h-60"></canvas>
                 </div>
 
                 <!-- Customers Chart -->
-                <div class="shadow-lg rounded-lg p-4">
-                    <h3 class="text-center text-white font-bold bg-purple-700 py-2 px-4 rounded-md inline-block">
+                <div class="shadow-lg rounded-lg p-4 bg-white">
+                    <h3 class="text-center text-blue-700 font-bold py-2 px-4 rounded-md inline-block">
                         Customer Count Over Time
                     </h3>
                     <canvas id="customersChart" class="w-full h-60"></canvas>
                 </div>
             </div>
-
         </div>
+
 
         <!-- Recent Orders Table -->
         <div class="recent-orders" style="margin-top: 40px; background-color: rgba(255, 255, 255, 0.95); padding: 20px; border-radius: 12px; box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.15);">
@@ -144,160 +144,155 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
         // Orders Chart
-        const ordersCtx = document.getElementById('ordersChart').getContext('2d');
-        const ordersChart = new Chart(ordersCtx, {
-            type: 'line',
-            data: {
-                labels: {!! json_encode($chartData['dates']) !!}, // X-axis labels
-                datasets: [{
-                    label: 'Orders', // Dataset label
-                    data: {!! json_encode($chartData['orders']) !!}, // Y-axis data
-                    borderColor: '#00008B',
-                    backgroundColor: 'rgba(2, 76, 170, 0.1)',
-                    fill: true,
-                }],
-            },
-            options: {
-                responsive: true,
-                plugins: {
-                    legend: { display: false },
+        // Orders Chart
+const ordersCtx = document.getElementById('ordersChart').getContext('2d');
+const ordersChart = new Chart(ordersCtx, {
+    type: 'line',
+    data: {
+        labels: {!! json_encode($chartData['dates']) !!},
+        datasets: [{
+            label: 'Orders',
+            data: {!! json_encode($chartData['orders']) !!},
+            borderColor: '#FFA500',
+            backgroundColor: 'rgba(255, 165, 0, 0.2)',
+            fill: true,
+            tension: 0.4,
+        }],
+    },
+    options: {
+        responsive: true,
+        plugins: {
+            legend: { display: false },
+        },
+        scales: {
+            x: {
+                ticks: {
+                    color: '#000000',
+                    font: { size: 13 },
                 },
-                scales: {
-                    x: {
-                        ticks: {
-                            color: '#ffffff', // Change tick label color for X-axis
-                            font: {
-                            size: 13, // Set font size for Y-axis ticks
-                        },
-                        },
-                    },
-                    y: {
-                        ticks: {
-                            color: '#ffffff', // Change tick label color for Y-axis
-                            font: {
-                            size: 13, // Set font size for Y-axis ticks
-                        },
-                        },
-                    },
-                },
+                grid: { color: 'rgba(0, 0, 0, 0.1)' },
             },
-        });
+            y: {
+                ticks: {
+                    color: '#000000',
+                    font: { size: 13 },
+                },
+                grid: { color: 'rgba(0, 0, 0, 0.1)' },
+            },
+        },
+        layout: { padding: 10 },
+    },
+});
 
+// Revenue Chart (Total Price)
+const revenueCtx = document.getElementById('revenueChart').getContext('2d');
+const revenueChart = new Chart(revenueCtx, {
+    type: 'bar',
+    data: {
+        labels: {!! json_encode($chartData['dates']) !!},
+        datasets: [{
+            label: 'Total Price',
+            data: {!! json_encode($chartData['total_price']) !!},
+            backgroundColor: '#FFA500',
+        }],
+    },
+    options: {
+        responsive: true,
+        plugins: {
+            legend: { display: false },
+        },
+        scales: {
+            x: {
+                ticks: {
+                    color: '#000000',
+                    font: { size: 13 },
+                },
+                grid: { color: 'rgba(0, 0, 0, 0.1)' },
+            },
+            y: {
+                ticks: {
+                    color: '#000000',
+                    font: { size: 13 },
+                },
+                grid: { color: 'rgba(0, 0, 0, 0.1)' },
+            },
+        },
+    },
+});
 
-        // Revenue Chart (Total Price)
-        const revenueCtx = document.getElementById('revenueChart').getContext('2d');
-        const revenueChart = new Chart(revenueCtx, {
-            type: 'bar',
-            data: {
-                labels: {!! json_encode($chartData['dates']) !!},
-                datasets: [{
-                    label: 'Total Price',
-                    data: {!! json_encode($chartData['total_price']) !!},
-                    backgroundColor: '#00008B',
-                }],
-            },
-            options: {
-                responsive: true,
-                plugins: {
-                    legend: { display: false },
+// Base Revenue Chart
+const baseRevenueCtx = document.getElementById('baseRevenueChart').getContext('2d');
+const baseRevenueChart = new Chart(baseRevenueCtx, {
+    type: 'bar',
+    data: {
+        labels: {!! json_encode($chartData['dates']) !!},
+        datasets: [{
+            label: 'Base Total Price',
+            data: {!! json_encode($chartData['base_total_price']) !!},
+            backgroundColor: '#FFA500',
+        }],
+    },
+    options: {
+        responsive: true,
+        plugins: {
+            legend: { display: false },
+        },
+        scales: {
+            x: {
+                ticks: {
+                    color: '#000000',
+                    font: { size: 13 },
                 },
-                scales: {
-                    x: {
-                        ticks: {
-                            color: '#ffffff', // Change tick label color for X-axis
-                            font: {
-                            size: 13, // Set font size for Y-axis ticks
-                        },
-                        },
-                    },
-                    y: {
-                        ticks: {
-                            color: '#ffffff', // Change tick label color for Y-axis
-                            font: {
-                            size: 13, // Set font size for Y-axis ticks
-                        },
-                        },
-                    },
-                },
+                grid: { color: 'rgba(0, 0, 0, 0.1)' },
             },
-        });
+            y: {
+                ticks: {
+                    color: '#000000',
+                    font: { size: 13 },
+                },
+                grid: { color: 'rgba(0, 0, 0, 0.1)' },
+            },
+        },
+    },
+});
 
-        // Base Revenue Chart
-        const baseRevenueCtx = document.getElementById('baseRevenueChart').getContext('2d');
-        const baseRevenueChart = new Chart(baseRevenueCtx, {
-            type: 'bar',
-            data: {
-                labels: {!! json_encode($chartData['dates']) !!},
-                datasets: [{
-                    label: 'Base Total Price',
-                    data: {!! json_encode($chartData['base_total_price']) !!},
-                    backgroundColor: '#00008B',
-                }],
-            },
-            options: {
-                responsive: true,
-                plugins: {
-                    legend: { display: false },
+// Customers Chart
+const customersCtx = document.getElementById('customersChart').getContext('2d');
+const customersChart = new Chart(customersCtx, {
+    type: 'line',
+    data: {
+        labels: {!! json_encode($chartData['dates']) !!},
+        datasets: [{
+            label: 'Customers',
+            data: {!! json_encode($chartData['customers']) !!},
+            borderColor: '#FFA500',
+            backgroundColor: 'rgba(255, 165, 0, 0.2)',
+            fill: true,
+        }],
+    },
+    options: {
+        responsive: true,
+        plugins: {
+            legend: { display: false },
+        },
+        scales: {
+            x: {
+                ticks: {
+                    color: '#000000',
+                    font: { size: 13 },
                 },
-                scales: {
-                    x: {
-                        ticks: {
-                            color: '#ffffff', // Change tick label color for X-axis
-                            font: {
-                            size: 13, // Set font size for Y-axis ticks
-                        },
-                        },
-                    },
-                    y: {
-                        ticks: {
-                            color: '#ffffff', // Change tick label color for Y-axis
-                            font: {
-                            size: 13, // Set font size for Y-axis ticks
-                        },
-                        },
-                    },
-                },
+                grid: { color: 'rgba(0, 0, 0, 0.1)' },
             },
-        });
+            y: {
+                ticks: {
+                    color: '#000000',
+                    font: { size: 13 },
+                },
+                grid: { color: 'rgba(0, 0, 0, 0.1)' },
+            },
+        },
+    },
+});
 
-        // Customers Chart
-        const customersCtx = document.getElementById('customersChart').getContext('2d');
-        const customersChart = new Chart(customersCtx, {
-            type: 'line',
-            data: {
-                labels: {!! json_encode($chartData['dates']) !!},
-                datasets: [{
-                    label: 'Customers',
-                    data: {!! json_encode($chartData['customers']) !!},
-                    borderColor: '#00008B',
-                    backgroundColor: 'rgba(255, 165, 0, 0.1)',
-                    fill: true,
-                }],
-            },
-            options: {
-                responsive: true,
-                plugins: {
-                    legend: { display: false },
-                },
-                scales: {
-                    x: {
-                        ticks: {
-                            color: '#ffffff', // Change tick label color for X-axis
-                            font: {
-                            size: 13, // Set font size for Y-axis ticks
-                        },
-                        },
-                    },
-                    y: {
-                        ticks: {
-                            color: '#ffffff', // Change tick label color for Y-axis
-                            font: {
-                            size: 13, // Set font size for Y-axis ticks
-                        },
-                        },
-                    },
-                },
-            },
-        });
     </script>
 @endsection

@@ -35,46 +35,36 @@
 
     <div class="flex flex-col gap-4 mb-4">
         <form method="GET" action="{{ route('admin.orders.index') }}" class="flex flex-wrap gap-4 items-end">
-            <div class="flex flex-col">
-                <label for="date_ordered_from" class="mb-1 text-sm font-medium">Date From:</label>
-                <input type="date" name="date_ordered_from" id="date_ordered_from" value="{{ request('date_ordered_from') }}" class="px-3 py-2 border border-gray-300 rounded">
-            </div>
+        <!-- Existing filters -->
+        <div class="flex flex-col">
+            <label for="date_ordered_from" class="mb-1 text-sm font-medium">Date From:</label>
+            <input type="date" name="date_ordered_from" id="date_ordered_from" value="{{ request('date_ordered_from') }}" class="px-3 py-2 border border-gray-300 rounded">
+        </div>
 
-            <div class="flex flex-col">
-                <label for="date_ordered_to" class="mb-1 text-sm font-medium">Date To:</label>
-                <input type="date" name="date_ordered_to" id="date_ordered_to" value="{{ request('date_ordered_to') }}" class="px-3 py-2 border border-gray-300 rounded">
-            </div>
+        <div class="flex flex-col">
+            <label for="date_ordered_to" class="mb-1 text-sm font-medium">Date To:</label>
+            <input type="date" name="date_ordered_to" id="date_ordered_to" value="{{ request('date_ordered_to') }}" class="px-3 py-2 border border-gray-300 rounded">
+        </div>
 
-            <div class="flex flex-col">
-                <label for="status" class="mb-1 text-sm font-medium">Status:</label>
-                <select name="status" id="status" class="px-3 py-2 border border-gray-300 rounded">
-                    <option value="">All</option>
-                    <option value="pending" {{ request('status') == 'pending' ? 'selected' : '' }}>Pending</option>
-                    <option value="ready_for_shipping" {{ request('status') == 'ready_for_shipping' ? 'selected' : '' }}>Ready for Shipping</option>
-                    <option value="delivered" {{ request('status') == 'delivered' ? 'selected' : '' }}>Delivered</option>
-                    <option value="cancelled" {{ request('status') == 'cancelled' ? 'selected' : '' }}>Cancelled</option>
-                </select>
-            </div>
+        <!-- Sorting filter -->
+        <div class="flex flex-col">
+            <label for="sort_by" class="mb-1 text-sm font-medium">Sort By:</label>
+            <select name="sort_by" id="sort_by" class="px-3 py-2 border border-gray-300 rounded">
+                <option value="">Select</option>
+                <option value="created_at_asc" {{ request('sort_by') == 'created_at_asc' ? 'selected' : '' }}>Created Date (Ascending)</option>
+                <option value="created_at_desc" {{ request('sort_by') == 'created_at_desc' ? 'selected' : '' }}>Created Date (Descending)</option>
+                <option value="updated_at_asc" {{ request('sort_by') == 'updated_at_asc' ? 'selected' : '' }}>Modified Date (Ascending)</option>
+                <option value="updated_at_desc" {{ request('sort_by') == 'updated_at_desc' ? 'selected' : '' }}>Modified Date (Descending)</option>
+            </select>
+        </div>
 
-            <div class="flex flex-col">
-                <label for="driver_id" class="mb-1 text-sm font-medium">Driver:</label>
-                <select name="driver_id" id="driver_id" class="px-3 py-2 border border-gray-300 rounded">
-                    <option value="">All</option>
-                    @foreach ($drivers as $driver)
-                        <option value="{{ $driver->id }}" {{ request('driver_id') == $driver->id ? 'selected' : '' }}>
-                            {{ $driver->name }}
-                        </option>
-                    @endforeach
-                </select>
-            </div>
 
-            <div class="flex">
-                <button type="submit" class="px-3 py-2 bg-blue-500 text-white rounded hover:bg-orange-600">
-                    Filter
-                </button>
-            </div>
-
-        </form>
+        <div class="flex">
+            <button type="submit" class="px-3 py-2 bg-blue-500 text-white rounded hover:bg-orange-600">
+                Filter
+            </button>
+        </div>
+    </form>
 
         <a href="{{ route('admin.orders.create') }}" class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-orange-600 w-fit">
             Create New Order
@@ -127,18 +117,18 @@
                             <a href="{{ route('admin.orders.show', $order->id) }}" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">View</a>
 
                             @if ($order->status !== 'delivered')
-                                <a href="{{ route('admin.orders.edit', $order->id) }}" class="bg-yellow-500 text-white px-4 py-2 rounded hover:bg-yellow-600">Edit</a>
+                                <a href="{{ route('admin.orders.edit', $order->id) }}" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-yellow-600">Edit</a>
                                 @if ($order->status !== 'cancelled')
-                                    <button class="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600" onclick="showCancelModal({{ $order->id }})">Cancel</button>
+                                    <button class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-red-600" onclick="showCancelModal({{ $order->id }})">Cancel</button>
                                 @else
-                                    <span class="text-gray-500 px-4 py-2">Cancelled</span>
+                                    <span class="bg-blue-500 px-4 py-2">Cancelled</span>
                                 @endif
                             @endif
 
                             @if ($order->status === 'Pending')
                                 <form action="{{ route('admin.orders.process', $order->id) }}" method="POST" class="inline">
                                     @csrf
-                                    <button type="submit" class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600">Process</button>
+                                    <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-green-600">Process</button>
                                 </form>
                             @endif
 
