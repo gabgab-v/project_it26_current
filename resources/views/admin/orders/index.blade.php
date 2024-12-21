@@ -21,55 +21,55 @@
     </header>
 
     <section class="content">
-    <h1 class="text-3xl font-bold mb-4">Orders List</h1>
+        <h1 class="text-3xl font-bold mb-4">Orders List</h1>
 
-    <div class="flex gap-2 mb-4">
-        <form method="POST" action="{{ route('admin.logout') }}">
-            @csrf
-            <button type="submit" class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-orange-600">
-                {{ __('Log Out') }}
-            </button>
-        </form>
-        <a href="{{ route('admin.dashboard') }}" class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-orange-600">Dashboard</a>
-    </div>
+        <div class="flex gap-2 mb-4">
+            <form method="POST" action="{{ route('admin.logout') }}">
+                @csrf
+                <button type="submit" class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-orange-600">
+                    {{ __('Log Out') }}
+                </button>
+            </form>
+            <a href="{{ route('admin.dashboard') }}" class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-orange-600">Dashboard</a>
+        </div>
 
     <div class="flex flex-col gap-4 mb-4">
         <form method="GET" action="{{ route('admin.orders.index') }}" class="flex flex-wrap gap-4 items-end">
-        <!-- Existing filters -->
-        <div class="flex flex-col">
-            <label for="date_ordered_from" class="mb-1 text-sm font-medium">Date From:</label>
-            <input type="date" name="date_ordered_from" id="date_ordered_from" value="{{ request('date_ordered_from') }}" class="px-3 py-2 border border-gray-300 rounded">
+            <!-- Existing filters -->
+            <div class="flex flex-col">
+                <label for="date_ordered_from" class="mb-1 text-sm font-medium">Date From:</label>
+                <input type="date" name="date_ordered_from" id="date_ordered_from" value="{{ request('date_ordered_from') }}" class="px-3 py-2 border border-gray-300 rounded">
+            </div>
+
+            <div class="flex flex-col">
+                <label for="date_ordered_to" class="mb-1 text-sm font-medium">Date To:</label>
+                <input type="date" name="date_ordered_to" id="date_ordered_to" value="{{ request('date_ordered_to') }}" class="px-3 py-2 border border-gray-300 rounded">
+            </div>
+
+            <!-- Sorting filter -->
+            <div class="flex flex-col">
+                <label for="sort_by" class="mb-1 text-sm font-medium">Sort By:</label>
+                <select name="sort_by" id="sort_by" class="px-3 py-2 border border-gray-300 rounded">
+                    <option value="">Select</option>
+                    <option value="created_at_asc" {{ request('sort_by') == 'created_at_asc' ? 'selected' : '' }}>Created Date (Ascending)</option>
+                    <option value="created_at_desc" {{ request('sort_by') == 'created_at_desc' ? 'selected' : '' }}>Created Date (Descending)</option>
+                    <option value="updated_at_asc" {{ request('sort_by') == 'updated_at_asc' ? 'selected' : '' }}>Modified Date (Ascending)</option>
+                    <option value="updated_at_desc" {{ request('sort_by') == 'updated_at_desc' ? 'selected' : '' }}>Modified Date (Descending)</option>
+                </select>
+            </div>
+
+
+            <div class="flex">
+                <button type="submit" class="px-3 py-2 bg-blue-500 text-white rounded hover:bg-orange-600">
+                    Filter
+                </button>
+            </div>
+        </form>
+
+            <a href="{{ route('admin.orders.create') }}" class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-orange-600 w-fit">
+                Create New Order
+            </a>
         </div>
-
-        <div class="flex flex-col">
-            <label for="date_ordered_to" class="mb-1 text-sm font-medium">Date To:</label>
-            <input type="date" name="date_ordered_to" id="date_ordered_to" value="{{ request('date_ordered_to') }}" class="px-3 py-2 border border-gray-300 rounded">
-        </div>
-
-        <!-- Sorting filter -->
-        <div class="flex flex-col">
-            <label for="sort_by" class="mb-1 text-sm font-medium">Sort By:</label>
-            <select name="sort_by" id="sort_by" class="px-3 py-2 border border-gray-300 rounded">
-                <option value="">Select</option>
-                <option value="created_at_asc" {{ request('sort_by') == 'created_at_asc' ? 'selected' : '' }}>Created Date (Ascending)</option>
-                <option value="created_at_desc" {{ request('sort_by') == 'created_at_desc' ? 'selected' : '' }}>Created Date (Descending)</option>
-                <option value="updated_at_asc" {{ request('sort_by') == 'updated_at_asc' ? 'selected' : '' }}>Modified Date (Ascending)</option>
-                <option value="updated_at_desc" {{ request('sort_by') == 'updated_at_desc' ? 'selected' : '' }}>Modified Date (Descending)</option>
-            </select>
-        </div>
-
-
-        <div class="flex">
-            <button type="submit" class="px-3 py-2 bg-blue-500 text-white rounded hover:bg-orange-600">
-                Filter
-            </button>
-        </div>
-    </form>
-
-        <a href="{{ route('admin.orders.create') }}" class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-orange-600 w-fit">
-            Create New Order
-        </a>
-    </div>
 
 
         <div class="overflow-x-auto relative w-full max-w-full">

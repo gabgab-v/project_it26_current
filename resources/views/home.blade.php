@@ -157,6 +157,33 @@
         footer a:hover {
             text-decoration: underline;
         }
+
+        .about-us, .services {
+            padding: 40px 10%;
+            background: rgba(255, 255, 255, 0.9);
+            margin: 100px auto;
+            border-radius: 10px;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.3);
+        }
+
+        .about-us h2, .services h2 {
+            color: #091057;
+            font-size: 2rem;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        .about-us p, .services ul {
+            font-size: 1.2rem;
+            color: #333333;
+            line-height: 1.8;
+            text-align: justify;
+        }
+
+        .services ul {
+            list-style: disc;
+            padding-left: 20px;
+        }
     </style>
 </head>
 <body>
@@ -170,8 +197,8 @@
             </div>
         </div>
         <nav>
-            <a href="#">About Us</a>
-            <a href="#">Services</a>
+            <a href="#about-us">About Us</a>
+            <a href="#services">Services</a>
             @guest
                 <a href="{{ route('login') }}">Log In</a>
                 <a href="{{ route('register') }}">Register</a>
@@ -247,6 +274,27 @@
         </ul>
     </div>
 </div>
+    </section>
+
+    <section id="about-us" class="about-us">
+        <h2>About Us</h2>
+        <p>
+            JGAB Express is your trusted partner for fast, reliable, and secure logistics solutions. 
+            Our mission is to keep you informed and your deliveries on track. With a dedicated team of professionals 
+            and cutting-edge technology, we ensure that your parcels are handled with utmost care and efficiency. 
+            Whether you're a business or an individual, JGAB Express is committed to exceeding your expectations.
+        </p>
+    </section>
+
+    <section id="services" class="services">
+        <h2>Our Services</h2>
+        <ul>
+            <li>Local parcel delivery</li>
+            <li>Same-day and next-day delivery options</li>
+            <li>Real-time parcel tracking</li>
+            <li>Warehouse management solutions</li>
+            <li>Customizable logistics for businesses</li>
+        </ul>
     </section>
 
     <footer>
