@@ -12,8 +12,10 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('orders', function (Blueprint $table) {
-            //
-            $table->foreignId('driver_id')->nullable()->constrained('drivers')->onDelete('set null');
+            // Check if the 'driver_id' column does not exist
+            if (!Schema::hasColumn('orders', 'driver_id')) {
+                $table->foreignId('driver_id')->nullable()->constrained('drivers')->onDelete('set null');
+            }
         });
     }
 
@@ -23,9 +25,11 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('orders', function (Blueprint $table) {
-            //
-            $table->dropForeign(['driver_id']);
-            $table->dropColumn('driver_id');
+            // Safely drop the foreign key and column if they exist
+            if (Schema::hasColumn('orders', 'driver_id')) {
+                $table->dropForeign(['driver_id']);
+                $table->dropColumn('driver_id');
+            }
         });
     }
 };
