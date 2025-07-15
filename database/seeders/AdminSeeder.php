@@ -10,12 +10,13 @@ class AdminSeeder extends Seeder
 {
     public function run()
     {
-        // Create a Warehouse Admin
+        // Create a Admin
+        // Create a Warehouse role also
         Admin::create([
-            'name' => 'Admin Warehouse',
-            'email' => 'warehouse1@example.com',
-            'password' => Hash::make('password123'),
-            'role' => 'warehouse',
+            'name' => 'Gab Admin',
+            'email' => 'jjgab@example.com',
+            'password' => Hash::make('12341234'),
+            'role' => 'admin',
         ]);
         // password sa staff staffpassword123
     }

@@ -172,9 +172,8 @@
 
             <!-- Remember Me -->
             <div class="input-group">
-                <label for="remember_me" class="checkbox-label">
-                    <input id="remember_me" type="checkbox" name="remember" class="checkbox-input">
-                    <span>Remember me</span>
+                <label>
+                    <input type="checkbox" name="remember"> Remember me
                 </label>
             </div>
 

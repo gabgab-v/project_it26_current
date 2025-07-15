@@ -146,13 +146,13 @@
         @endif
 
         <!-- Login Form -->
-        <form method="POST" action="{{ route('login') }}">
+        <form method="POST" action="{{ route('login') }} " autocomplete="off">
             @csrf
 
             <!-- Email Address -->
             <div class="input-group">
                 <label for="email" class="input-label">Email</label>
-                <input id="email" type="email" name="email" value="{{ old('email') }}" required autofocus autocomplete="username" class="input-field">
+                <input id="email" type="email" name="email" autocomplete="off" value="{{ old('email') }}" required autofocus autocomplete="username" class="input-field">
                 @error('email')
                     <span class="error-text">{{ $message }}</span>
                 @enderror

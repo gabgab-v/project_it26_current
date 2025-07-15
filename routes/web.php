@@ -20,7 +20,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
     // Guest-only routes for Admin Login
     Route::middleware('guest:admin')->group(function () {
         Route::get('login', [LoginController::class, 'showLoginForm'])->name('login');
-        Route::post('login', [LoginController::class, 'login']);
+        Route::post('login', [LoginController::class, 'login'])->middleware('throttle:5,1');
     });
 
     // Authenticated-only routes for Admin
@@ -96,7 +96,7 @@ Route::post('/track-order', [OrderController::class, 'trackOrder'])->name('track
 Route::prefix('driver')->name('driver.')->group(function () {
     // Driver Authentication Routes
     Route::get('/login', [DriverAuthController::class, 'showLoginForm'])->name('login');
-    Route::post('/login', [DriverAuthController::class, 'login']);
+    Route::post('/login', [DriverAuthController::class, 'login'])->middleware('throttle:5,1');
     Route::get('/register', [DriverAuthController::class, 'showRegisterForm'])->name('register');
     Route::post('/register', [DriverAuthController::class, 'register']);
 

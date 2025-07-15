@@ -8,6 +8,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules;
+use Illuminate\Validation\Rules\Password;
+use App\Models\DriverLoginLog;
 
 class DriverAuthController extends Controller
 {
@@ -22,7 +24,7 @@ class DriverAuthController extends Controller
     {
         $request->validate([
             'email' => 'required|email',
-            'password' => 'required',
+            'password' => 'required|min:8',
         ]);
 
         $driver = Driver::where('email', $request->email)->first();
@@ -39,7 +41,20 @@ class DriverAuthController extends Controller
             ]);
         }
 
-        if (Auth::guard('driver')->attempt($request->only('email', 'password'))) {
+        if (Auth::guard('driver')->attempt($request->only('email', 'password'), $request->filled('remember'))) {
+            $request->session()->regenerate();
+
+            \Log::info('Driver logged in:', [
+                'driver_id' => $driver->id,
+                'email' => $driver->email,
+                'ip' => $request->ip(),
+                'user_agent' => $request->userAgent(),
+            ]);
+            DriverLoginLog::create([
+                'driver_id' => $driver->id,
+                'ip_address' => $request->ip(),
+                'user_agent' => $request->userAgent(),
+            ]);
             return redirect()->route('driver.dashboard');
         }
 
@@ -58,11 +73,11 @@ class DriverAuthController extends Controller
     public function register(Request $request)
     {
         $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|email|unique:drivers',
-            'license' => 'required|string|unique:drivers',
-            'vehicle' => 'required|string',
-            'password' => ['required', 'confirmed', Rules\Password::defaults()],
+            'name' => 'required|string|max:255|regex:/^[a-zA-Z\s]+$/',
+            'email' => 'required|email:rfc,dns|unique:drivers',
+            'license' => 'required|string|unique:drivers|regex:/^[A-Z0-9-]+$/',
+            'vehicle' => 'required|string|max:255',
+            'password' => ['required', 'confirmed',Password::min(8)->mixedCase()->letters()->numbers()->symbols()],
         ]);
 
         $driver = Driver::create([
@@ -73,6 +88,8 @@ class DriverAuthController extends Controller
             'password' => Hash::make($request->password),
             'status' => 'pending', // Default status for new registrations
         ]);
+
+        
 
         return redirect()->route('driver.login')->with('status', 'Registration successful! Your account is pending approval.');
     }

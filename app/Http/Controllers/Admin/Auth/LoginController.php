@@ -5,6 +5,9 @@ namespace App\Http\Controllers\Admin\Auth;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\RateLimiter;
+use App\Models\AdminLoginLog;
+
 
 class LoginController extends Controller
 {
@@ -15,12 +18,28 @@ class LoginController extends Controller
 
     public function login(Request $request)
     {
-        $credentials = $request->only('email', 'password');
+        $request->validate([
+            'email' => 'required|email',
+            'password' => 'required|min:8',
+        ]);
 
-        if (Auth::guard('admin')->attempt($credentials)) {
+        $key = 'login:admin:' . $request->ip();
+
+        if (RateLimiter::tooManyAttempts($key, 5)) {
+            return back()->withErrors(['email' => 'Too many login attempts. Please try again later.']);
+        }
+
+        if (Auth::guard('admin')->attempt($request->only('email', 'password'))) {
+            $request->session()->regenerate();
             $admin = Auth::guard('admin')->user();
 
             \Log::info('Authenticated Admin:', ['email' => $admin->email, 'role' => $admin->role]);
+            AdminLoginLog::create([
+                'admin_id' => $admin->id,
+                'ip_address' => $request->ip(),
+                'user_agent' => $request->userAgent(),
+            ]);
+
 
             // Redirect based on the admin's role
             if ($admin->role === 'warehouse') {
@@ -34,7 +53,9 @@ class LoginController extends Controller
             return redirect($route);
         }
 
+        RateLimiter::hit($key);
         \Log::error('Invalid login attempt:', ['email' => $request->email]);
+
         return redirect()->back()->withErrors(['email' => 'Invalid credentials']);
     }
 
